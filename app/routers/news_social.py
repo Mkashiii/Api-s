@@ -5,8 +5,10 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
 import requests
+import logging
 
 router = APIRouter(prefix="/api/media", tags=["News, Media & Social Data"])
+logger = logging.getLogger(__name__)
 
 HEADERS = {
     "User-Agent": (
@@ -189,11 +191,11 @@ def tiktok_data(
     except HTTPException:
         raise
     except Exception as exc:
+        logger.warning("TikTok scrape failed: %s", exc)
         return {
             "status": "limited",
             "api": "TikTok & Instagram Data",
             "note": "TikTok requires official API access. Apply at developers.tiktok.com",
-            "error": str(exc),
         }
 
 

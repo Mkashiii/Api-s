@@ -4,11 +4,13 @@ APIs 19-23: Verification, Identity & Communication
 import random
 import string
 import re
+import logging
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
 
 router = APIRouter(prefix="/api/verify", tags=["Verification, Identity & Communication"])
+logger = logging.getLogger(__name__)
 
 # In-memory OTP store (use Redis in production)
 _otp_store: dict = {}
@@ -103,12 +105,13 @@ def validate_email(email: str = Query(..., description="Email address to validat
             "role_account": local.lower() in {"admin", "info", "support", "noreply", "no-reply", "postmaster"},
         }
     except Exception as exc:
+        logger.warning("Email validation failed for %s: %s", email, exc)
         return {
             "status": "invalid",
             "api": "Email Validation & Deliverability",
             "email": email,
             "valid_format": False,
-            "error": str(exc),
+            "error": "Invalid email address format.",
         }
 
 

@@ -2,13 +2,18 @@
 APIs 09-14: Data Scraping & Extraction
 """
 import re
+import ipaddress
+import socket
+from urllib.parse import urlparse
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
 import requests
 from bs4 import BeautifulSoup
+import logging
 
 router = APIRouter(prefix="/api/scraping", tags=["Data Scraping & Extraction"])
+logger = logging.getLogger(__name__)
 
 HEADERS = {
     "User-Agent": (
@@ -19,13 +24,49 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
+_PRIVATE_NETS = [
+    ipaddress.ip_network("127.0.0.0/8"),
+    ipaddress.ip_network("10.0.0.0/8"),
+    ipaddress.ip_network("172.16.0.0/12"),
+    ipaddress.ip_network("192.168.0.0/16"),
+    ipaddress.ip_network("169.254.0.0/16"),
+    ipaddress.ip_network("::1/128"),
+    ipaddress.ip_network("fc00::/7"),
+]
+
+def _validate_url(url: str) -> None:
+    """Validate URL is a safe external HTTPS/HTTP target (SSRF protection)."""
+    parsed = urlparse(url)
+    if parsed.scheme not in ("http", "https"):
+        raise HTTPException(status_code=400, detail="Only http/https URLs are allowed.")
+    hostname = parsed.hostname or ""
+    if not hostname:
+        raise HTTPException(status_code=400, detail="Invalid URL: missing hostname.")
+    # Resolve and check for private/loopback IPs
+    try:
+        addrs = socket.getaddrinfo(hostname, None)
+        for _, _, _, _, sockaddr in addrs:
+            ip = ipaddress.ip_address(sockaddr[0])
+            for net in _PRIVATE_NETS:
+                if ip in net:
+                    raise HTTPException(status_code=400, detail="Requests to private/internal addresses are not allowed.")
+    except HTTPException:
+        raise
+    except Exception:
+        # DNS resolution failure — allow and let requests handle it
+        pass
+
 def _get(url: str, timeout: int = 10) -> BeautifulSoup:
+    _validate_url(url)
     try:
         resp = requests.get(url, headers=HEADERS, timeout=timeout)
         resp.raise_for_status()
         return BeautifulSoup(resp.text, "lxml")
+    except HTTPException:
+        raise
     except Exception as exc:
-        raise HTTPException(status_code=502, detail=f"Fetch failed: {str(exc)}")
+        logger.warning("Scrape fetch failed for %s: %s", url, exc)
+        raise HTTPException(status_code=502, detail="Failed to fetch the requested URL.")
 
 
 # ── 09 Web Scraper / Data Extractor ──────────────────────────────────────────
@@ -95,12 +136,12 @@ def linkedin_scraper(profile_url: str = Query(..., description="LinkedIn profile
             "note": "LinkedIn heavily restricts scraping. Use official LinkedIn API for production.",
         }
     except Exception as exc:
+        logger.warning("LinkedIn scrape failed: %s", exc)
         return {
             "status": "limited",
             "api": "LinkedIn Profile Scraper",
             "url": profile_url,
             "note": "LinkedIn requires authentication. Use LinkedIn Official API with OAuth2.",
-            "error": str(exc),
         }
 
 
@@ -137,12 +178,12 @@ def amazon_product(asin: str = Query(..., description="Amazon ASIN (e.g. B08N5WR
             "review_count": reviews_tag.get_text(strip=True) if reviews_tag else "N/A",
         }
     except Exception as exc:
+        logger.warning("Amazon scrape failed for ASIN %s: %s", asin, exc)
         return {
             "status": "limited",
             "api": "Amazon Product Data",
             "asin": asin,
             "note": "Amazon uses bot detection. Consider Rainforest API or Oxylabs for production.",
-            "error": str(exc),
         }
 
 
@@ -180,12 +221,12 @@ def google_serp(
             "people_also_ask": paa,
         }
     except Exception as exc:
+        logger.warning("Google SERP scrape failed: %s", exc)
         return {
             "status": "limited",
             "api": "Google SERP Scraper",
             "query": query,
             "note": "Google blocks scrapers. Use SerpAPI or DataForSEO for production.",
-            "error": str(exc),
         }
 
 
@@ -223,12 +264,12 @@ def jobs_scraper(
             "jobs": jobs,
         }
     except Exception as exc:
+        logger.warning("Jobs scrape failed: %s", exc)
         return {
             "status": "limited",
             "api": "Jobs Scraper",
             "query": query,
             "note": "Indeed may block scrapers. Use Jooble or Adzuna API for production.",
-            "error": str(exc),
         }
 
 
@@ -265,10 +306,10 @@ def real_estate(
             "listings": results,
         }
     except Exception as exc:
+        logger.warning("Real estate scrape failed: %s", exc)
         return {
             "status": "limited",
             "api": "Real Estate / Zillow Data",
             "address": address,
             "note": "Use Zillow Bridge API or Attom Data for production use.",
-            "error": str(exc),
         }

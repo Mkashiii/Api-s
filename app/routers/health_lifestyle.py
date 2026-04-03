@@ -5,8 +5,10 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
 import requests
+import logging
 
 router = APIRouter(prefix="/api/lifestyle", tags=["Health, Food, Travel & Lifestyle"])
+logger = logging.getLogger(__name__)
 
 
 # ── 34 Food & Nutrition Data ──────────────────────────────────────────────────
@@ -184,11 +186,11 @@ def flight_search(
             "offers": results,
         }
     except Exception as exc:
+        logger.warning("Flight search failed: %s", exc)
         return {
             "status": "limited",
             "api": "Flight Price Search",
             "note": "Register at developers.amadeus.com for free API credentials.",
-            "error": str(exc),
         }
 
 
