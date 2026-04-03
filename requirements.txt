@@ -1,0 +1,64 @@
+fastapi==0.135.3
+uvicorn[standard]==0.29.0
+jinja2==3.1.4
+python-multipart==0.0.22
+itsdangerous==2.2.0
+starlette==0.49.1
+
+# Database
+sqlalchemy==2.0.30
+
+# Auth
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.4.0
+
+# AI / NLP
+vaderSentiment==3.3.2
+langdetect==1.0.9
+gTTS==2.5.1
+# sumy and nltk removed: nltk<=3.9.3 has an unpatched unauthenticated remote-shutdown
+# vulnerability in nltk.app.wordnet_app (no patch available). Summarization is now
+# handled by a self-contained TF-IDF implementation in app/routers/ai_nlp.py.
+
+# Web scraping
+requests==2.31.0
+beautifulsoup4==4.12.3
+lxml==5.2.2
+fake-useragent==1.5.1
+
+# Finance
+yfinance==0.2.38
+
+# Phone/Email validation
+phonenumbers==8.13.37
+email-validator==2.1.1
+dnspython==2.6.1
+
+# WHOIS
+python-whois==0.9.4
+
+# QR/Barcode
+qrcode[pil]==7.4.2
+python-barcode==0.15.1
+Pillow==12.1.1
+
+# PDF
+# Note: requires system libs — sudo apt-get install libpango-1.0-0 libpangocairo-1.0-0
+weasyprint==68.0
+
+# OCR (requires tesseract-ocr system package)
+pytesseract==0.3.10
+
+# Fake data
+Faker==25.2.0
+
+# Background removal — OPTIONAL, install manually:
+#   pip install rembg
+# Note: rembg<=2.0.57 has a CORS misconfiguration in its built-in HTTP server
+# (CVE has no patch). We use rembg only as a Python library (not its server),
+# but it is excluded from the default install until a patched version is released.
+
+# Markdown / utils
+markdown2==2.4.13
+python-dotenv==1.0.1
+httpx==0.27.0

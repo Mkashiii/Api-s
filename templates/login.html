@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Login — RapidAPI Platform{% endblock %}
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-600 shadow-lg mb-4">
+        <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900">RapidAPI Platform</h1>
+      <p class="text-gray-500 mt-1">48 Production-Ready APIs · 2026</p>
+    </div>
+
+    <!-- Card -->
+    <div class="card p-8 shadow-xl">
+      <h2 class="text-xl font-semibold text-gray-800 mb-6">Sign in to your account</h2>
+
+      {% if error %}
+      <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
+        <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+        </svg>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="/login" class="space-y-5">
+        <input type="hidden" name="next" value="{{ next or '/' }}" />
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Username</label>
+          <input
+            type="text" name="username" required autocomplete="username"
+            placeholder="Enter your username"
+            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+          <div class="relative">
+            <input
+              type="password" name="password" id="password" required autocomplete="current-password"
+              placeholder="Enter your password"
+              class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"
+            />
+            <button type="button" onclick="togglePwd()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+              <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition shadow-sm text-sm">
+          Sign In
+        </button>
+      </form>
+
+      <div class="mt-4 text-center text-sm text-gray-500">
+        Don't have an account?
+        <a href="/register" class="text-brand-600 hover:underline font-medium">Register</a>
+      </div>
+
+      <!-- Demo credentials hint -->
+      <div class="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-100">
+        <p class="text-xs font-semibold text-blue-700 mb-2">Demo Credentials</p>
+        <div class="grid grid-cols-2 gap-3 text-xs text-blue-800">
+          <div class="bg-white rounded p-2 border border-blue-100">
+            <div class="font-semibold text-blue-900">👑 Admin</div>
+            <div>user: <code class="bg-blue-100 px-1 rounded">admin</code></div>
+            <div>pass: <code class="bg-blue-100 px-1 rounded">admin123</code></div>
+          </div>
+          <div class="bg-white rounded p-2 border border-blue-100">
+            <div class="font-semibold text-blue-900">👤 User</div>
+            <div>user: <code class="bg-blue-100 px-1 rounded">user</code></div>
+            <div>pass: <code class="bg-blue-100 px-1 rounded">user123</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-xs text-gray-400 mt-6">
+      Or browse APIs publicly at <a href="/listing" class="text-brand-600 hover:underline">API Listing</a>
+    </p>
+  </div>
+</div>
+
+<script>
+function togglePwd() {
+  const p = document.getElementById('password');
+  p.type = p.type === 'password' ? 'text' : 'password';
+}
+</script>
+{% endblock %}

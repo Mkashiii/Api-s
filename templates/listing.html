@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+{% block title %}48 APIs — RapidAPI Platform 2026{% endblock %}
+{% block body %}
+
+{% macro api_card(api, cat) %}
+<div class="api-card card p-5 hover:shadow-md transition-shadow duration-200 flex flex-col h-full" data-cat="{{ cat }}" data-title="{{ api.title|lower }}">
+  <div class="flex items-start justify-between mb-3">
+    <span class="text-xs font-bold text-gray-400 bg-gray-100 rounded px-1.5 py-0.5">#{{ api.num }}</span>
+    {% if api.badge == "hot" %}
+    <span class="badge-hot text-xs font-semibold px-2 py-0.5 rounded-full">🔥 {{ api.badge_label }}</span>
+    {% elif api.badge == "rising" %}
+    <span class="badge-rising text-xs font-semibold px-2 py-0.5 rounded-full">↑ {{ api.badge_label }}</span>
+    {% else %}
+    <span class="badge-steady text-xs font-semibold px-2 py-0.5 rounded-full">✦ {{ api.badge_label }}</span>
+    {% endif %}
+  </div>
+  <h3 class="font-bold text-gray-900 text-sm mb-2 leading-snug">{{ api.title }}</h3>
+  <p class="text-xs text-gray-500 mb-3 flex-grow">
+    <span class="font-medium text-gray-700">Buyers:</span> {{ api.buyers }}
+  </p>
+  <div class="flex items-center gap-1 mb-3">
+    {% for i in range(5) %}
+    <div class="w-3 h-3 rounded-full {{ 'bg-brand-500' if i < api.profit else 'bg-gray-200' }}"></div>
+    {% endfor %}
+    <span class="text-xs text-gray-500 ml-1">Profit</span>
+  </div>
+  <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+    <span class="bg-gray-100 rounded px-1.5 py-0.5">{{ api.difficulty }}</span>
+    <span class="font-mono bg-blue-50 text-blue-700 rounded px-1.5 py-0.5">{{ api.method }}</span>
+  </div>
+  <div class="text-xs text-gray-400 bg-gray-50 rounded px-2 py-1 mb-3 font-mono truncate">{{ api.endpoint }}</div>
+  <div class="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded p-2 mb-3">
+    💡 {{ api.tip }}
+  </div>
+  <a href="/docs" target="_blank"
+    class="block text-center text-xs font-semibold text-brand-600 border border-brand-200 rounded-lg py-1.5 hover:bg-brand-50 transition mt-auto">
+    Try in API Docs →
+  </a>
+</div>
+{% endmacro %}
+
+<!-- Nav -->
+<nav class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <span class="text-lg font-bold text-gray-900">RapidAPI Platform</span>
+      <span class="hidden sm:inline text-xs text-gray-400 font-medium border border-gray-200 rounded-full px-2 py-0.5">2026</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/docs" target="_blank"
+        class="hidden sm:flex items-center gap-1.5 text-sm text-gray-600 hover:text-brand-600 transition font-medium">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        API Docs
+      </a>
+      {% if user %}
+        {% if user.role == 'admin' %}
+        <a href="/admin/dashboard" class="text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-lg transition">Admin Dashboard</a>
+        {% else %}
+        <a href="/dashboard" class="text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-lg transition">My Dashboard</a>
+        {% endif %}
+      {% else %}
+        <a href="/login" class="text-sm font-medium text-gray-700 hover:text-brand-600 transition">Sign In</a>
+        <a href="/register" class="text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-lg transition">Get Started</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="bg-gradient-to-br from-white via-blue-50 to-indigo-50 border-b border-gray-100 py-16 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 text-xs font-semibold text-brand-700 bg-brand-100 border border-brand-200 rounded-full px-3 py-1 mb-4">
+      <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+      2026 Edition — Production Ready
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+      48 APIs to Build<br/>
+      <span class="text-brand-600">&amp; Sell on RapidAPI</span>
+    </h1>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+      Trending · High Demand · Production-Ready. All built with Python. Start earning recurring income today.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4 text-sm">
+      <div class="bg-white rounded-xl border border-gray-200 px-5 py-3 shadow-sm flex items-center gap-2">
+        <span class="text-2xl font-bold text-brand-600">48</span>
+        <span class="text-gray-600">API Ideas</span>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 px-5 py-3 shadow-sm flex items-center gap-2">
+        <span class="text-2xl font-bold text-brand-600">9</span>
+        <span class="text-gray-600">Categories</span>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 px-5 py-3 shadow-sm flex items-center gap-2">
+        <span class="text-2xl font-bold text-brand-600">100k+</span>
+        <span class="text-gray-600">RapidAPI Devs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Category nav pills -->
+<div class="bg-white border-b border-gray-100 sticky top-16 z-40">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2 overflow-x-auto scrollbar-hide">
+    <button onclick="filterCat('all')" id="pill-all"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-brand-200 bg-brand-600 text-white transition">
+      All (48)
+    </button>
+    <button onclick="filterCat('ai')" id="pill-ai"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      🤖 AI & NLP (8)
+    </button>
+    <button onclick="filterCat('scraping')" id="pill-scraping"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      🕷 Scraping (6)
+    </button>
+    <button onclick="filterCat('finance')" id="pill-finance"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      💰 Finance (4)
+    </button>
+    <button onclick="filterCat('verify')" id="pill-verify"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      ✅ Verification (5)
+    </button>
+    <button onclick="filterCat('media')" id="pill-media"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      📰 News & Media (4)
+    </button>
+    <button onclick="filterCat('tools')" id="pill-tools"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      🛠 Dev Tools (6)
+    </button>
+    <button onclick="filterCat('health')" id="pill-health"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      🏥 Health & Food (5)
+    </button>
+    <button onclick="filterCat('location')" id="pill-location"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      🗺 Location (4)
+    </button>
+    <button onclick="filterCat('entertainment')" id="pill-entertainment"
+      class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:bg-brand-50 hover:border-brand-300 transition">
+      🎭 Entertainment (6)
+    </button>
+  </div>
+</div>
+
+<!-- Main content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Search -->
+  <div class="mb-8">
+    <div class="relative max-w-xl mx-auto">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input id="search" type="text" placeholder="Search 48 APIs..."
+        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm bg-white shadow-sm"
+        oninput="searchAPIs(this.value)"/>
+    </div>
+  </div>
+
+  <!-- ── CATEGORY SECTIONS ── -->
+
+  <!-- AI & NLP -->
+  <section id="cat-ai" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center text-xl">🤖</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">AI & Natural Language Processing</h2>
+        <p class="text-sm text-gray-500">8 APIs — Highest demand in 2026</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-ai">
+      {% set ai_apis = [
+        {"num":"01","title":"AI Text Summarizer","badge":"hot","badge_label":"#1 Trending","buyers":"News apps, students, research tools","difficulty":"Medium","profit":5,"tip":"Multi-language support + adjustable length","endpoint":"/api/ai/summarize","method":"POST"},
+        {"num":"02","title":"Sentiment Analysis","badge":"hot","badge_label":"Hot","buyers":"Social media, CRM, e-commerce","difficulty":"Easy","profit":4,"tip":"Add emotion detection for premium tier","endpoint":"/api/ai/sentiment","method":"POST"},
+        {"num":"03","title":"AI Content Generator","badge":"hot","badge_label":"Hot","buyers":"Marketing agencies, SaaS, e-commerce","difficulty":"Medium","profit":5,"tip":"Niche it — real estate listing earns more","endpoint":"/api/ai/content-generator","method":"POST"},
+        {"num":"04","title":"Language Detection & Translation","badge":"rising","badge_label":"↑ Rising","buyers":"Multilingual apps, support bots, travel","difficulty":"Medium","profit":4,"tip":"Cheaper than Google Translate is your edge","endpoint":"/api/ai/translate","method":"POST"},
+        {"num":"05","title":"AI Grammar & Spell Checker","badge":"rising","badge_label":"↑ Rising","buyers":"Writing tools, email clients, LMS","difficulty":"Easy–Medium","profit":4,"tip":"Add tone rewriter mode as upsell","endpoint":"/api/ai/grammar-check","method":"POST"},
+        {"num":"06","title":"Named Entity Recognition","badge":"steady","badge_label":"Steady","buyers":"Legal tech, journalism, HR software","difficulty":"Medium","profit":3,"tip":"Vertical NER models command premium pricing","endpoint":"/api/ai/ner","method":"POST"},
+        {"num":"07","title":"Text-to-Speech (TTS)","badge":"rising","badge_label":"↑ Rising","buyers":"Podcast tools, accessibility, e-learning","difficulty":"Medium","profit":5,"tip":"Voice cloning as premium add-on","endpoint":"/api/ai/tts","method":"POST"},
+        {"num":"08","title":"AI Chatbot / Conversational","badge":"hot","badge_label":"Hot","buyers":"SaaS, e-commerce, banking apps","difficulty":"Hard","profit":5,"tip":"Domain personas for higher-value contracts","endpoint":"/api/ai/chatbot","method":"POST"},
+      ] %}
+      {% for api in ai_apis %}
+        {{ api_card(api, "ai") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Scraping -->
+  <section id="cat-scraping" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-xl">🕷</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Data Scraping & Extraction</h2>
+        <p class="text-sm text-gray-500">6 APIs — #1 Most Sold category</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-scraping">
+      {% set scraping_apis = [
+        {"num":"09","title":"Web Scraper / Data Extractor","badge":"hot","badge_label":"#1 Most Sold","buyers":"Price monitors, research tools, data brokers","difficulty":"Hard","profit":5,"tip":"Proxy rotation + CAPTCHA solving built in","endpoint":"/api/scraping/web-scraper","method":"POST"},
+        {"num":"10","title":"LinkedIn Profile Scraper","badge":"hot","badge_label":"Top Earner","buyers":"B2B lead gen, recruiters, sales intel","difficulty":"Hard","profit":5,"tip":"Consistently highest revenue API on RapidAPI","endpoint":"/api/scraping/linkedin","method":"GET"},
+        {"num":"11","title":"Amazon Product Data","badge":"rising","badge_label":"↑ Rising","buyers":"Price comparison, affiliate marketers","difficulty":"Hard","profit":5,"tip":"Price drop alert webhook for conversions","endpoint":"/api/scraping/amazon-product","method":"GET"},
+        {"num":"12","title":"Google SERP Scraper","badge":"hot","badge_label":"Hot","buyers":"SEO tools, rank trackers, content research","difficulty":"Hard","profit":5,"tip":"Support Image + News + Maps results","endpoint":"/api/scraping/google-serp","method":"GET"},
+        {"num":"13","title":"Indeed / Jobs Scraper","badge":"rising","badge_label":"↑ Rising","buyers":"Job aggregators, HR analytics, career apps","difficulty":"Medium–Hard","profit":4,"tip":"Add salary data extraction","endpoint":"/api/scraping/jobs","method":"GET"},
+        {"num":"14","title":"Real Estate / Zillow Data","badge":"rising","badge_label":"↑ Rising","buyers":"Property investment, mortgage, real estate","difficulty":"Hard","profit":4,"tip":"Cover multiple countries for broader reach","endpoint":"/api/scraping/real-estate","method":"GET"},
+      ] %}
+      {% for api in scraping_apis %}
+        {{ api_card(api, "scraping") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Finance -->
+  <section id="cat-finance" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">💰</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Finance, Stocks & Crypto</h2>
+        <p class="text-sm text-gray-500">4 APIs — High-value subscribers</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-finance">
+      {% set finance_apis = [
+        {"num":"15","title":"Real-Time Stock Price","badge":"hot","badge_label":"Hot","buyers":"Fintech, trading bots, portfolio trackers","difficulty":"Medium","profit":5,"tip":"Add RSI, MACD, Bollinger Bands","endpoint":"/api/finance/stock","method":"GET"},
+        {"num":"16","title":"Crypto Price & Market Data","badge":"rising","badge_label":"↑ Rising","buyers":"Crypto wallets, DeFi, trading bots","difficulty":"Medium","profit":4,"tip":"Add on-chain data for premium plan","endpoint":"/api/finance/crypto","method":"GET"},
+        {"num":"17","title":"Currency Exchange Rate","badge":"steady","badge_label":"Evergreen","buyers":"E-commerce, travel apps, accounting","difficulty":"Easy","profit":4,"tip":"Affordable Open Exchange Rates alternative","endpoint":"/api/finance/currency","method":"GET"},
+        {"num":"18","title":"Financial News & Earnings","badge":"rising","badge_label":"↑ Rising","buyers":"Investment research, stock screeners","difficulty":"Medium","profit":4,"tip":"AI-powered earnings summary = premium","endpoint":"/api/finance/financial-news","method":"GET"},
+      ] %}
+      {% for api in finance_apis %}
+        {{ api_card(api, "finance") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Verification -->
+  <section id="cat-verify" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl">✅</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Verification, Identity & Communication</h2>
+        <p class="text-sm text-gray-500">5 APIs — Essential for every SaaS</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-verify">
+      {% set verify_apis = [
+        {"num":"19","title":"Phone Number Validation","badge":"hot","badge_label":"Hot","buyers":"Every SaaS signup, fraud prevention, CRM","difficulty":"Easy","profit":4,"tip":"Bundle with email validation for higher ARPU","endpoint":"/api/verify/phone","method":"GET"},
+        {"num":"20","title":"Email Validation & Deliverability","badge":"rising","badge_label":"↑ Rising","buyers":"Email marketing, SaaS onboarding, lead gen","difficulty":"Easy","profit":4,"tip":"MX record + bulk validation = paid features","endpoint":"/api/verify/email","method":"GET"},
+        {"num":"21","title":"IP Geolocation & Threat","badge":"steady","badge_label":"Evergreen","buyers":"Security platforms, CDNs, ad fraud systems","difficulty":"Easy–Medium","profit":4,"tip":"VPN/proxy/Tor detection = premium plan","endpoint":"/api/verify/ip-geolocation","method":"GET"},
+        {"num":"22","title":"OTP / SMS Verification","badge":"rising","badge_label":"↑ Rising","buyers":"Banking, fintech, healthcare, any auth app","difficulty":"Medium","profit":5,"tip":"Add WhatsApp OTP as alternative channel","endpoint":"/api/verify/otp/send","method":"POST"},
+        {"num":"23","title":"WHOIS & Domain Lookup","badge":"steady","badge_label":"Steady","buyers":"Cybersecurity, domain resellers, due diligence","difficulty":"Easy","profit":3,"tip":"Add bulk check + typosquatting detection","endpoint":"/api/verify/whois","method":"GET"},
+      ] %}
+      {% for api in verify_apis %}
+        {{ api_card(api, "verify") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- News & Media -->
+  <section id="cat-media" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-xl">📰</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">News, Media & Social Data</h2>
+        <p class="text-sm text-gray-500">4 APIs — Real-time data streams</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-media">
+      {% set media_apis = [
+        {"num":"24","title":"Real-Time News","badge":"hot","badge_label":"Hot","buyers":"News aggregators, trading bots, media monitoring","difficulty":"Medium","profit":5,"tip":"AI summarisation on each result = differentiator","endpoint":"/api/media/news","method":"GET"},
+        {"num":"25","title":"YouTube Data & Analytics","badge":"hot","badge_label":"Hot","buyers":"Content creators, brand tracking, SEO platforms","difficulty":"Medium","profit":4,"tip":"Transcript + AI summary = heavily requested","endpoint":"/api/media/youtube","method":"GET"},
+        {"num":"26","title":"TikTok & Instagram Data","badge":"rising","badge_label":"↑ Fast Rising","buyers":"Influencer marketing, brand monitoring, analytics","difficulty":"Hard","profit":5,"tip":"Real-time viral trend detection","endpoint":"/api/media/tiktok","method":"GET"},
+        {"num":"27","title":"Podcast Search & Metadata","badge":"rising","badge_label":"↑ Rising","buyers":"Podcast apps, media monitoring, repurposing tools","difficulty":"Medium","profit":3,"tip":"Combine with NLP keyword extraction","endpoint":"/api/media/podcasts","method":"GET"},
+      ] %}
+      {% for api in media_apis %}
+        {{ api_card(api, "media") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Developer Tools -->
+  <section id="cat-tools" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-xl">🛠</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Developer Utilities & Document Tools</h2>
+        <p class="text-sm text-gray-500">6 APIs — Every developer's toolkit</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-tools">
+      {% set tools_apis = [
+        {"num":"28","title":"PDF Generator / HTML-to-PDF","badge":"hot","badge_label":"Hot","buyers":"Invoice tools, reporting dashboards, legal tech","difficulty":"Medium","profit":4,"tip":"Pre-built invoice templates = instant conversions","endpoint":"/api/tools/pdf","method":"POST"},
+        {"num":"29","title":"OCR / Image-to-Text","badge":"rising","badge_label":"↑ Rising","buyers":"Document management, receipt scanners, HR","difficulty":"Medium","profit":4,"tip":"Structured data extraction = premium plan","endpoint":"/api/tools/ocr","method":"POST"},
+        {"num":"30","title":"Barcode & QR Code","badge":"steady","badge_label":"Evergreen","buyers":"Retail, logistics, event ticketing, restaurants","difficulty":"Easy","profit":3,"tip":"Bulk generation (1000+) = enterprise pricing","endpoint":"/api/tools/qrcode","method":"POST"},
+        {"num":"31","title":"Screenshot / Website Capture","badge":"rising","badge_label":"↑ Rising","buyers":"SEO audit tools, UI testing, archiving","difficulty":"Medium","profit":4,"tip":"Mobile + desktop + tablet capture modes","endpoint":"/api/tools/screenshot","method":"GET"},
+        {"num":"32","title":"URL Shortener & Link Tracking","badge":"steady","badge_label":"Steady","buyers":"Marketing tools, email platforms, social schedulers","difficulty":"Easy","profit":3,"tip":"UTM builder + A/B test variants as paid features","endpoint":"/api/tools/shorten","method":"POST"},
+        {"num":"33","title":"Image Compression & Optimisation","badge":"steady","badge_label":"Steady","buyers":"CMS platforms, web agencies, e-commerce","difficulty":"Easy–Medium","profit":3,"tip":"CDN integration guide = faster enterprise adoption","endpoint":"/api/tools/image-compress","method":"POST"},
+      ] %}
+      {% for api in tools_apis %}
+        {{ api_card(api, "tools") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Health & Lifestyle -->
+  <section id="cat-health" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center text-xl">🏥</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Health, Food, Travel & Lifestyle</h2>
+        <p class="text-sm text-gray-500">5 APIs — Growing wellness market</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-health">
+      {% set health_apis = [
+        {"num":"34","title":"Food & Nutrition Data","badge":"steady","badge_label":"Steady","buyers":"Fitness apps, diet trackers, recipe platforms","difficulty":"Medium","profit":4,"tip":"Barcode lookup = full meal-logging solution","endpoint":"/api/lifestyle/nutrition","method":"GET"},
+        {"num":"35","title":"Recipe Search & Ingredient Parser","badge":"rising","badge_label":"↑ Rising","buyers":"Meal planning, grocery delivery, smart kitchen","difficulty":"Medium","profit":3,"tip":"'What can I cook?' endpoint = extremely popular","endpoint":"/api/lifestyle/recipes","method":"GET"},
+        {"num":"36","title":"Flight & Hotel Price","badge":"rising","badge_label":"↑ Rising","buyers":"Travel comparison, booking tools, corporate travel","difficulty":"Hard","profit":5,"tip":"#1 most-used API on all of RapidAPI","endpoint":"/api/lifestyle/flights","method":"GET"},
+        {"num":"37","title":"Exercise & Workout Database","badge":"steady","badge_label":"Steady","buyers":"Gym apps, PT platforms, wearable integrations","difficulty":"Easy","profit":3,"tip":"AI workout plan generator = natural upsell","endpoint":"/api/lifestyle/exercises","method":"GET"},
+        {"num":"38","title":"Medical Drug Information","badge":"steady","badge_label":"Steady","buyers":"Healthcare apps, pharmacy, EMR, telehealth","difficulty":"Hard","profit":4,"tip":"HIPAA compliance docs = enterprise conversions","endpoint":"/api/lifestyle/drugs","method":"GET"},
+      ] %}
+      {% for api in health_apis %}
+        {{ api_card(api, "health") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Location & Maps -->
+  <section id="cat-location" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center text-xl">🗺</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Location, Maps & Weather</h2>
+        <p class="text-sm text-gray-500">4 APIs — Evergreen demand</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-location">
+      {% set location_apis = [
+        {"num":"39","title":"Geocoding & Reverse Geocoding","badge":"steady","badge_label":"Evergreen","buyers":"Delivery apps, logistics, property platforms","difficulty":"Easy–Medium","profit":4,"tip":"Cheaper than Google Maps is your selling point","endpoint":"/api/location/geocode","method":"GET"},
+        {"num":"40","title":"Weather Forecast","badge":"steady","badge_label":"Evergreen","buyers":"Travel apps, farming, event organisers","difficulty":"Medium","profit":4,"tip":"Historical weather (50 years) = premium tier","endpoint":"/api/location/weather","method":"GET"},
+        {"num":"41","title":"Places & Points of Interest","badge":"rising","badge_label":"↑ Rising","buyers":"Travel apps, city guides, local SEO tools","difficulty":"Medium","profit":3,"tip":"Niche for halal restaurants, EV charging stations","endpoint":"/api/location/places","method":"GET"},
+        {"num":"42","title":"Distance & Routing","badge":"rising","badge_label":"↑ Rising","buyers":"Logistics, ride-hailing, delivery, fleet mgmt","difficulty":"Medium–Hard","profit":4,"tip":"Multi-stop route optimisation = killer feature","endpoint":"/api/location/routing","method":"POST"},
+      ] %}
+      {% for api in location_apis %}
+        {{ api_card(api, "location") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Entertainment -->
+  <section id="cat-entertainment" class="mb-12">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-xl bg-yellow-100 flex items-center justify-center text-xl">🎭</div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Entertainment, Sports & Miscellaneous</h2>
+        <p class="text-sm text-gray-500">6 APIs — Fun + functional</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-entertainment">
+      {% set entertainment_apis = [
+        {"num":"43","title":"Sports Scores & Live Data","badge":"hot","badge_label":"Hot","buyers":"Sports apps, fantasy sports, betting, news","difficulty":"Medium–Hard","profit":5,"tip":"Cricket + football combined dominates demand","endpoint":"/api/entertainment/sports/football","method":"GET"},
+        {"num":"44","title":"Movie & TV Show Data","badge":"steady","badge_label":"Steady","buyers":"Streaming guides, recommendation engines","difficulty":"Medium","profit":3,"tip":"'Where to watch' streaming availability = #1 feature","endpoint":"/api/entertainment/movies","method":"GET"},
+        {"num":"45","title":"Random Quote / Fact / Joke","badge":"steady","badge_label":"Easy Start","buyers":"Productivity apps, screensavers, chatbot fillers","difficulty":"Easy","profit":2,"tip":"Great beginner API for first RapidAPI reviews","endpoint":"/api/entertainment/random/quote","method":"GET"},
+        {"num":"46","title":"E-commerce Product Recommendation","badge":"rising","badge_label":"↑ Rising","buyers":"Online stores, Shopify apps, retail analytics","difficulty":"Hard","profit":5,"tip":"Personalisation APIs = highest subscription prices","endpoint":"/api/entertainment/recommendations","method":"POST"},
+        {"num":"47","title":"Fake Data / Test Data Generator","badge":"steady","badge_label":"Steady","buyers":"QA teams, app developers, demo environments","difficulty":"Easy","profit":3,"tip":"Locale-specific data fills a real gap","endpoint":"/api/entertainment/fake-data","method":"GET"},
+        {"num":"48","title":"Background Removal / Image AI","badge":"hot","badge_label":"↑ Fast Rising","buyers":"Photo editors, e-commerce, social media tools","difficulty":"Medium–Hard","profit":5,"tip":"Bulk processing (100+ images) = enterprise","endpoint":"/api/entertainment/background-remove","method":"POST"},
+      ] %}
+      {% for api in entertainment_apis %}
+        {{ api_card(api, "entertainment") }}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Launch Tips -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-brand-600 to-indigo-700 rounded-2xl p-8 text-white">
+      <h2 class="text-2xl font-bold mb-6">🚀 How to Launch on RapidAPI</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {% for tip in [
+          {"num":"1","title":"Start with 1–3 APIs","desc":"Pick highest demand + your skill set. Don't build all 48 at once."},
+          {"num":"2","title":"Free tier is essential","desc":"Offer 50–100 free calls/month. This is how you get reviews and traffic."},
+          {"num":"3","title":"Price in tiers","desc":"Basic / Pro / Ultra. Most buyers spend $10–$50/month."},
+          {"num":"4","title":"Docs are everything","desc":"APIs with great docs convert 3× better. Include examples in 5 languages."},
+          {"num":"5","title":"Speed matters","desc":"Under 300ms response time. Developers abandon slow APIs immediately."},
+          {"num":"6","title":"Reliability > features","desc":"99.9% uptime builds trust. Use a status page to show your track record."},
+          {"num":"7","title":"Respond to reviews","desc":"RapidAPI ranks APIs partly on engagement. Respond within 24 hours."},
+          {"num":"8","title":"Combine trending APIs","desc":"Bundle Scraper + Summariser + Sentiment as 'Research Suite' for premium."},
+        ] %}
+        <div class="bg-white/10 backdrop-blur rounded-xl p-4">
+          <div class="text-xs font-bold text-blue-200 mb-1">Step {{ tip.num }}</div>
+          <div class="font-semibold text-sm mb-1">{{ tip.title }}</div>
+          <div class="text-xs text-blue-100/80">{{ tip.desc }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-50 border-t border-gray-200 py-8 px-4">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <span class="text-sm font-semibold text-gray-700">RapidAPI Platform 2026</span>
+    </div>
+    <div class="flex items-center gap-6 text-sm text-gray-500">
+      <a href="/docs" class="hover:text-brand-600 transition">API Docs</a>
+      <a href="/login" class="hover:text-brand-600 transition">Sign In</a>
+      <a href="/register" class="hover:text-brand-600 transition">Register</a>
+    </div>
+    <p class="text-xs text-gray-400">Built with Python · FastAPI · Tailwind CSS</p>
+  </div>
+</footer>
+
+
+<script>
+let currentCat = 'all';
+
+function filterCat(cat) {
+  currentCat = cat;
+  // Update pills
+  document.querySelectorAll('.cat-pill').forEach(btn => {
+    btn.className = btn.className.replace('bg-brand-600 text-white border-brand-200', 'bg-white text-gray-600 border-gray-200 hover:bg-brand-50 hover:border-brand-300');
+  });
+  const active = document.getElementById('pill-' + cat);
+  if (active) {
+    active.className = active.className.replace('bg-white text-gray-600 border-gray-200 hover:bg-brand-50 hover:border-brand-300', 'bg-brand-600 text-white border-brand-200');
+  }
+  // Show/hide sections
+  document.querySelectorAll('section[id^="cat-"]').forEach(sec => {
+    if (cat === 'all' || sec.id === 'cat-' + cat) {
+      sec.style.display = '';
+    } else {
+      sec.style.display = 'none';
+    }
+  });
+}
+
+function searchAPIs(query) {
+  const q = query.toLowerCase().trim();
+  if (!q) {
+    document.querySelectorAll('.api-card').forEach(c => c.closest('.api-card').style.display = '');
+    document.querySelectorAll('section[id^="cat-"]').forEach(s => s.style.display = '');
+    filterCat(currentCat);
+    return;
+  }
+  // Show all sections when searching
+  document.querySelectorAll('section[id^="cat-"]').forEach(s => s.style.display = '');
+  document.querySelectorAll('.api-card').forEach(card => {
+    const title = card.dataset.title || '';
+    card.style.display = title.includes(q) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

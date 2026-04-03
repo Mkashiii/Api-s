@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Register — RapidAPI Platform{% endblock %}
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-600 shadow-lg mb-4">
+        <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900">Create Account</h1>
+      <p class="text-gray-500 mt-1">Join the RapidAPI Platform</p>
+    </div>
+
+    <div class="card p-8 shadow-xl">
+      {% if error %}
+      <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="/register" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Username</label>
+          <input type="text" name="username" required placeholder="Choose a username"
+            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+          <input type="email" name="email" required placeholder="your@email.com"
+            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+          <input type="password" name="password" required placeholder="Choose a password"
+            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"/>
+        </div>
+
+        <button type="submit"
+          class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition shadow-sm text-sm mt-2">
+          Create Account
+        </button>
+      </form>
+
+      <div class="mt-4 text-center text-sm text-gray-500">
+        Already have an account? <a href="/login" class="text-brand-600 hover:underline font-medium">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
