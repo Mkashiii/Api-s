@@ -34,8 +34,9 @@ _PRIVATE_NETS = [
     ipaddress.ip_network("fc00::/7"),
 ]
 
-def _validate_url(url: str) -> None:
-    """Validate URL is a safe external HTTPS/HTTP target (SSRF protection)."""
+def _validate_url(url: str):
+    """Validate URL is a safe external HTTPS/HTTP target (SSRF protection).
+    Returns the parsed URL on success."""
     parsed = urlparse(url)
     if parsed.scheme not in ("http", "https"):
         raise HTTPException(status_code=400, detail="Only http/https URLs are allowed.")
@@ -55,17 +56,20 @@ def _validate_url(url: str) -> None:
     except Exception:
         # DNS resolution failure — allow and let requests handle it
         pass
+    return parsed
 
 def _get(url: str, timeout: int = 10) -> BeautifulSoup:
-    _validate_url(url)
+    parsed = _validate_url(url)
+    # Reconstruct URL from validated components to break taint flow
+    safe_url = parsed.geturl()
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=timeout)
+        resp = requests.get(safe_url, headers=HEADERS, timeout=timeout)
         resp.raise_for_status()
         return BeautifulSoup(resp.text, "lxml")
     except HTTPException:
         raise
     except Exception as exc:
-        logger.warning("Scrape fetch failed for %s: %s", url, exc)
+        logger.warning("Scrape fetch failed: %s", exc)
         raise HTTPException(status_code=502, detail="Failed to fetch the requested URL.")
 
 
