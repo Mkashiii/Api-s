@@ -3,7 +3,7 @@ Database setup using SQLAlchemy + SQLite.
 """
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, Text
 from sqlalchemy.orm import sessionmaker, declarative_base
-from datetime import datetime
+from datetime import datetime, timezone
 
 DATABASE_URL = "sqlite:///./rapidapi_platform.db"
 
@@ -22,7 +22,7 @@ class User(Base):
     role = Column(String, default="user")  # "admin" or "user"
     is_active = Column(Boolean, default=True)
     api_key = Column(String, unique=True, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class APICall(Base):
@@ -32,7 +32,7 @@ class APICall(Base):
     user_id = Column(Integer)
     api_name = Column(String)
     endpoint = Column(String)
-    called_at = Column(DateTime, default=datetime.utcnow)
+    called_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     status_code = Column(Integer)
 
 
