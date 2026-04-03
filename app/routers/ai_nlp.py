@@ -44,6 +44,8 @@ def summarize_text(payload: TextIn):
         from sumy.nlp.tokenizers import Tokenizer
         from sumy.summarizers.lsa import LsaSummarizer
         import nltk
+        # These downloads use hardcoded corpus names (not user input),
+        # so the nltk path-traversal CVE (GHSA-gcmv-qmwv-q3pf) is not applicable here.
         try:
             nltk.data.find("tokenizers/punkt")
         except LookupError:

@@ -391,18 +391,30 @@ async def remove_background(
     try:
         import io
         import base64
-        from rembg import remove
+        try:
+            from rembg import remove as rembg_remove
+        except ImportError:
+            return {
+                "status": "unavailable",
+                "api": "Background Removal / Image AI",
+                "note": (
+                    "rembg is not installed. "
+                    "Install it manually: pip install rembg. "
+                    "Note: rembg<=2.0.57 has a CORS issue in its built-in server; "
+                    "install only if you are using it as a library (not its server mode)."
+                ),
+            }
+
         from PIL import Image
 
         contents = await file.read()
         input_img = Image.open(io.BytesIO(contents))
-        output_img = remove(contents, model_name=model)
-        output_pil = Image.open(io.BytesIO(output_img))
+        output_bytes = rembg_remove(contents, model_name=model)
+        output_pil = Image.open(io.BytesIO(output_bytes))
 
         buf = io.BytesIO()
         output_pil.save(buf, format="PNG")
         result_b64 = base64.b64encode(buf.getvalue()).decode()
-        input_b64 = base64.b64encode(contents).decode()
 
         return {
             "status": "success",
