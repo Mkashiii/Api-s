@@ -36,50 +36,73 @@ class ChatIn(BaseModel):
 
 # ── 01 AI Text Summarizer ─────────────────────────────────────────────────────
 
+def _tfidf_summarize(text: str, n: int = 3) -> list[str]:
+    """Lightweight extractive summarizer using TF-IDF sentence scoring.
+    Pure Python — no nltk or sumy dependency required.
+    """
+    import math
+    # Split into sentences
+    sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s.strip()]
+    if len(sentences) <= n:
+        return sentences
+
+    # Tokenise each sentence into lowercase words (strip punctuation)
+    def tokenise(s: str) -> list[str]:
+        return re.findall(r"[a-z]+", s.lower())
+
+    stop_words = {
+        "a","an","the","and","or","but","in","on","at","to","for","of","with",
+        "is","are","was","were","be","been","being","have","has","had","do",
+        "does","did","will","would","could","should","may","might","this",
+        "that","these","those","it","its","as","by","from","not","no","so",
+    }
+
+    tokenised = [tokenise(s) for s in sentences]
+    all_words = [w for tokens in tokenised for w in tokens if w not in stop_words]
+
+    # TF: word frequency within sentence
+    # IDF: log(N / df) across sentences
+    N = len(sentences)
+    df: dict[str, int] = {}
+    for tokens in tokenised:
+        for w in set(tokens):
+            if w not in stop_words:
+                df[w] = df.get(w, 0) + 1
+
+    def score(tokens: list[str]) -> float:
+        if not tokens:
+            return 0.0
+        tf: dict[str, float] = {}
+        for w in tokens:
+            if w not in stop_words:
+                tf[w] = tf.get(w, 0) + 1
+        total = max(len(tokens), 1)
+        s = 0.0
+        for w, cnt in tf.items():
+            idf = math.log((N + 1) / (df.get(w, 0) + 1)) + 1
+            s += (cnt / total) * idf
+        return s
+
+    scored = [(score(tokenised[i]), i, sentences[i]) for i in range(N)]
+    # Pick top-n by score, preserving original order
+    top = sorted(scored, key=lambda x: x[0], reverse=True)[:n]
+    top.sort(key=lambda x: x[1])
+    return [t[2] for t in top]
+
+
 @router.post("/summarize", summary="01 · AI Text Summarizer")
 def summarize_text(payload: TextIn):
     """Summarize long text into concise bullet points or paragraphs."""
-    try:
-        from sumy.parsers.plaintext import PlaintextParser
-        from sumy.nlp.tokenizers import Tokenizer
-        from sumy.summarizers.lsa import LsaSummarizer
-        import nltk
-        # These downloads use hardcoded corpus names (not user input),
-        # so the nltk path-traversal CVE (GHSA-gcmv-qmwv-q3pf) is not applicable here.
-        try:
-            nltk.data.find("tokenizers/punkt")
-        except LookupError:
-            nltk.download("punkt", quiet=True)
-        try:
-            nltk.data.find("tokenizers/punkt_tab")
-        except LookupError:
-            nltk.download("punkt_tab", quiet=True)
-
-        parser = PlaintextParser.from_string(payload.text, Tokenizer(payload.language or "english"))
-        summarizer = LsaSummarizer()
-        summary_sentences = summarizer(parser.document, payload.max_sentences or 3)
-        bullets = [str(s) for s in summary_sentences]
-        summary = " ".join(bullets) if bullets else payload.text[:300]
-        return {
-            "status": "success",
-            "api": "AI Text Summarizer",
-            "original_length": len(payload.text),
-            "summary": summary,
-            "bullets": bullets,
-            "compressed_ratio": round(len(summary) / max(len(payload.text), 1), 2),
-        }
-    except Exception as exc:
-        # Fallback: naive sentence split
-        sentences = re.split(r"(?<=[.!?])\s+", payload.text.strip())
-        bullets = sentences[: payload.max_sentences or 3]
-        return {
-            "status": "success",
-            "api": "AI Text Summarizer",
-            "original_length": len(payload.text),
-            "summary": " ".join(bullets),
-            "bullets": bullets,
-            "compressed_ratio": round(len(" ".join(bullets)) / max(len(payload.text), 1), 2),
-        }
+    bullets = _tfidf_summarize(payload.text, n=payload.max_sentences or 3)
+    summary = " ".join(bullets) if bullets else payload.text[:300]
+    return {
+        "status": "success",
+        "api": "AI Text Summarizer",
+        "original_length": len(payload.text),
+        "summary": summary,
+        "bullets": bullets,
+        "compressed_ratio": round(len(summary) / max(len(payload.text), 1), 2),
+    }
 
 
 # ── 02 Sentiment Analysis ─────────────────────────────────────────────────────
