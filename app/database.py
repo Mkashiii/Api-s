@@ -2,8 +2,7 @@
 Database setup using SQLAlchemy + SQLite.
 """
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 from datetime import datetime
 
 DATABASE_URL = "sqlite:///./rapidapi_platform.db"
