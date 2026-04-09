@@ -1,6 +1,6 @@
 """
 Social Media Video Downloader API
-Supports: Twitter/X, TikTok, Instagram, Facebook, YouTube, and 1 000+ more sites
+Supports: Twitter/X, TikTok, Instagram, Facebook, YouTube, and 1,000+ more sites
 powered by yt-dlp.
 
 Endpoints
@@ -138,7 +138,7 @@ def video_info(
     """
     Return video title, thumbnail, duration, uploader, and all available
     quality formats — **no download happens on the server**.
-    Supports 1 000+ sites via yt-dlp.
+    Supports 1,000+ sites via yt-dlp.
     """
     platform = _detect_platform(url)
     info = _extract_info(url)
@@ -211,7 +211,7 @@ def video_download_url(
     (minutes to hours depending on the platform).
 
     Supported platforms include **Twitter/X, TikTok, Instagram, Facebook,
-    YouTube, Vimeo, Dailymotion, Reddit**, and 1 000+ more.
+    YouTube, Vimeo, Dailymotion, Reddit**, and 1,000+ more.
     """
     platform = _detect_platform(url)
     info = _extract_info(url)
@@ -276,7 +276,7 @@ def video_download_url(
 
 @router.get("/supported-sites", summary="51 · List Supported Platforms")
 def supported_sites():
-    """Return highlights of the 1 000+ supported platforms."""
+    """Return highlights of the 1,000+ supported platforms."""
     highlights = [
         {"name": "Twitter / X", "url": "twitter.com / x.com", "notes": "Videos, GIFs"},
         {"name": "TikTok", "url": "tiktok.com", "notes": "Videos (public)"},
@@ -298,7 +298,7 @@ def supported_sites():
         "status": "success",
         "api": "Social Video Downloader — Supported Sites",
         "highlighted_platforms": highlights,
-        "total_supported": "1 000+",
+        "total_supported": "1,000+",
         "powered_by": "yt-dlp",
         "note": "Use /api/video/info?url=... to check if a specific URL is supported.",
     }
