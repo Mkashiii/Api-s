@@ -23,6 +23,7 @@ from app.routers.developer_tools import router as tools_router
 from app.routers.health_lifestyle import router as health_router
 from app.routers.location_maps import router as location_router
 from app.routers.entertainment import router as entertainment_router
+from app.routers.video_downloader import router as video_router
 
 
 # ── App setup ─────────────────────────────────────────────────────────────────
@@ -55,6 +56,7 @@ app.include_router(tools_router)
 app.include_router(health_router)
 app.include_router(location_router)
 app.include_router(entertainment_router)
+app.include_router(video_router)
 
 
 # ── Auth helpers ─────────────────────────────────────────────────────────────
@@ -131,6 +133,12 @@ def home(request: Request):
 def api_listing(request: Request):
     user = get_current_user(request)
     return templates.TemplateResponse("listing.html", {"request": request, "user": user})
+
+
+@app.get("/tools/video-downloader", response_class=HTMLResponse)
+def video_downloader_page(request: Request):
+    user = get_current_user(request)
+    return templates.TemplateResponse("video_downloader.html", {"request": request, "user": user})
 
 
 # ── Login / Logout ────────────────────────────────────────────────────────────

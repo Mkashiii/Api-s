@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Video Downloader — by Muhammad Kashif</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: radial-gradient(ellipse at 20% 20%, #0f0c29, #302b63 40%, #24243e 100%);
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ── animated background blobs ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      animation: drift 18s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 600px; height: 600px; background: #7928ca; top: -200px; left: -200px; animation-delay: 0s; }
+    .blob-2 { width: 500px; height: 500px; background: #0070f3; bottom: -150px; right: -150px; animation-delay: -6s; }
+    .blob-3 { width: 350px; height: 350px; background: #ff0080; top: 40%; left: 55%; animation-delay: -12s; }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(30px, -40px) scale(1.05); }
+      100% { transform: translate(-20px, 30px) scale(0.96); }
+    }
+
+    /* ── glassmorphism card ── */
+    .glass {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    .glass-sm {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+    }
+    .glass-xs {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+    }
+
+    /* ── gradient input ── */
+    .url-input {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 1rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      outline: none;
+      width: 100%;
+      padding: 14px 18px;
+    }
+    .url-input::placeholder { color: rgba(255,255,255,0.35); }
+    .url-input:focus {
+      border-color: rgba(120, 120, 255, 0.7);
+      box-shadow: 0 0 0 3px rgba(120, 120, 255, 0.2);
+    }
+
+    /* ── gradient button ── */
+    .btn-primary {
+      background: linear-gradient(135deg, #7928ca 0%, #0070f3 100%);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 14px 28px;
+      transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+      box-shadow: 0 4px 20px rgba(121, 40, 202, 0.45);
+    }
+    .btn-primary:hover  { filter: brightness(1.12); transform: translateY(-2px); box-shadow: 0 6px 28px rgba(121, 40, 202, 0.6); }
+    .btn-primary:active { transform: translateY(0); filter: brightness(0.95); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .btn-download {
+      background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 10px 22px;
+      transition: transform 0.18s, box-shadow 0.18s;
+      box-shadow: 0 4px 16px rgba(0,176,155,0.4);
+    }
+    .btn-download:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(0,176,155,0.55); }
+
+    /* ── platform pill ── */
+    .platform-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(6px);
+      white-space: nowrap;
+    }
+
+    /* ── quality badge ── */
+    .quality-btn {
+      padding: 6px 16px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.7);
+      transition: all 0.18s;
+    }
+    .quality-btn.active, .quality-btn:hover {
+      background: rgba(120, 120, 255, 0.28);
+      border-color: rgba(120, 120, 255, 0.6);
+      color: #fff;
+    }
+
+    /* ── spinner ── */
+    .spinner {
+      width: 22px; height: 22px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .spinner.active { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── result card animation ── */
+    .result-card {
+      animation: slideUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      opacity: 0;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── format row ── */
+    .format-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 10px;
+      transition: background 0.15s;
+      border: 1px solid transparent;
+    }
+    .format-row:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    /* ── platform logos as emoji (no CDN deps) ── */
+    .logo-twitter  { color: #1d9bf0; }
+    .logo-tiktok   { color: #ff0050; }
+    .logo-insta    { color: #e1306c; }
+    .logo-facebook { color: #1877f2; }
+    .logo-youtube  { color: #ff0000; }
+
+    /* ── hero number ── */
+    .stat-num {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- background blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────── -->
+<nav style="position:sticky;top:0;z-index:50;background:rgba(10,8,30,0.65);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7928ca,#0070f3);display:flex;align-items:center;justify-content:center;font-size:18px;">⬇</div>
+      <span style="font-weight:700;font-size:1rem;">Social<span style="background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Video</span></span>
+      <span style="font-size:0.7rem;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);">by Muhammad Kashif</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="/docs" target="_blank" style="font-size:0.82rem;color:rgba(255,255,255,0.55);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">API Docs ↗</a>
+      <a href="/listing" style="font-size:0.82rem;color:rgba(255,255,255,0.55);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">All APIs</a>
+      {% if user %}
+        <a href="{% if user.role == 'admin' %}/admin/dashboard{% else %}/dashboard{% endif %}" style="font-size:0.82rem;font-weight:600;color:#fff;background:linear-gradient(135deg,#7928ca,#0070f3);padding:7px 16px;border-radius:10px;text-decoration:none;">Dashboard</a>
+      {% else %}
+        <a href="/login" style="font-size:0.82rem;color:rgba(255,255,255,0.7);text-decoration:none;padding:7px 14px;">Sign In</a>
+        <a href="/register" style="font-size:0.82rem;font-weight:600;color:#fff;background:linear-gradient(135deg,#7928ca,#0070f3);padding:7px 16px;border-radius:10px;text-decoration:none;">Get Started</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────────────────── -->
+<section style="max-width:1100px;margin:0 auto;padding:70px 24px 40px;text-align:center;position:relative;z-index:1;">
+
+  <div style="display:inline-flex;align-items:center;gap:8px;font-size:0.75rem;font-weight:600;color:rgba(167,139,250,0.9);border:1px solid rgba(167,139,250,0.3);border-radius:999px;padding:5px 14px;margin-bottom:24px;background:rgba(167,139,250,0.08);">
+    <span style="width:7px;height:7px;border-radius:50%;background:#a78bfa;display:inline-block;animation:pulse 1.8s infinite;"></span>
+    1,000+ Supported Platforms · Powered by yt-dlp
+  </div>
+  <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}</style>
+
+  <h1 style="font-size:clamp(2.2rem,5vw,3.6rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;margin-bottom:18px;">
+    Download Any <br/>
+    <span style="background:linear-gradient(135deg,#a78bfa 0%,#60a5fa 50%,#34d399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Social Video</span>
+  </h1>
+  <p style="font-size:1.05rem;color:rgba(255,255,255,0.55);max-width:540px;margin:0 auto 40px;line-height:1.7;">
+    Twitter&nbsp;/&nbsp;X · TikTok · Instagram · Facebook · YouTube &amp; 1,000+ more.<br/>
+    <span style="font-size:0.88rem;">No app required. Paste a link, pick quality, download.</span>
+  </p>
+
+  <!-- platform pills row -->
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:50px;">
+    <span class="platform-pill"><span class="logo-twitter">𝕏</span> Twitter / X</span>
+    <span class="platform-pill"><span class="logo-tiktok">♪</span> TikTok</span>
+    <span class="platform-pill"><span class="logo-insta">📷</span> Instagram</span>
+    <span class="platform-pill"><span class="logo-facebook">f</span> Facebook</span>
+    <span class="platform-pill"><span class="logo-youtube">▶</span> YouTube</span>
+    <span class="platform-pill">🎬 Vimeo</span>
+    <span class="platform-pill">🎮 Twitch</span>
+    <span class="platform-pill">🌐 +1000 more</span>
+  </div>
+
+  <!-- ── Main downloader card ── -->
+  <div class="glass" style="max-width:760px;margin:0 auto;padding:36px 32px;">
+
+    <!-- URL input row -->
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+      <input id="videoUrl"
+             class="url-input"
+             type="url"
+             placeholder="Paste video URL — Twitter, TikTok, Instagram, Facebook, YouTube …"
+             style="flex:1;min-width:200px;"
+             onkeydown="if(event.key==='Enter') fetchInfo()"
+      />
+      <button class="btn-primary" onclick="fetchInfo()" id="fetchBtn" style="white-space:nowrap;display:flex;align-items:center;gap:8px;">
+        <span class="spinner" id="fetchSpinner"></span>
+        <span id="fetchBtnText">Get Video Info</span>
+      </button>
+    </div>
+
+    <!-- Quality selector -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+      <span style="font-size:0.8rem;color:rgba(255,255,255,0.45);font-weight:500;">Quality:</span>
+      <div style="display:flex;gap:8px;" id="qualityBtns">
+        <button class="quality-btn active" data-q="best" onclick="setQuality(this)">Best</button>
+        <button class="quality-btn" data-q="hd"   onclick="setQuality(this)">HD 720p</button>
+        <button class="quality-btn" data-q="sd"   onclick="setQuality(this)">SD 480p</button>
+        <button class="quality-btn" data-q="low"  onclick="setQuality(this)">Low 360p</button>
+      </div>
+    </div>
+    <p style="font-size:0.73rem;color:rgba(255,255,255,0.3);text-align:left;margin-bottom:24px;">
+      Or get exact formats from <em>Info</em> and use Format ID below.
+    </p>
+
+    <!-- Example links -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Try:</span>
+      <button onclick="tryExample('https://www.youtube.com/watch?v=dQw4w9WgXcQ')" style="font-size:0.72rem;color:rgba(120,180,255,0.8);background:rgba(120,180,255,0.1);border:1px solid rgba(120,180,255,0.2);border-radius:6px;padding:3px 10px;cursor:pointer;">YouTube</button>
+      <button onclick="tryExample('https://twitter.com/i/status/1671893413773127680')" style="font-size:0.72rem;color:rgba(29,155,240,0.9);background:rgba(29,155,240,0.1);border:1px solid rgba(29,155,240,0.25);border-radius:6px;padding:3px 10px;cursor:pointer;">Twitter/X</button>
+      <button onclick="tryExample('https://www.tiktok.com/@tiktok/video/6844509888509869317')" style="font-size:0.72rem;color:rgba(255,0,80,0.9);background:rgba(255,0,80,0.08);border:1px solid rgba(255,0,80,0.2);border-radius:6px;padding:3px 10px;cursor:pointer;">TikTok</button>
+    </div>
+
+    <!-- Error area -->
+    <div id="errorBox" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:14px 18px;color:#fca5a5;font-size:0.85rem;margin-bottom:16px;"></div>
+
+    <!-- ── Result area ── -->
+    <div id="resultArea"></div>
+
+  </div><!-- /main card -->
+</section>
+
+
+<!-- ── Stats row ──────────────────────────────────────────────────────── -->
+<section style="max-width:1100px;margin:50px auto;padding:0 24px;position:relative;z-index:1;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;">
+    <div class="glass-sm" style="padding:28px 24px;text-align:center;">
+      <div class="stat-num">1000+</div>
+      <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:6px;">Supported Sites</div>
+    </div>
+    <div class="glass-sm" style="padding:28px 24px;text-align:center;">
+      <div class="stat-num">4K</div>
+      <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:6px;">Max Quality</div>
+    </div>
+    <div class="glass-sm" style="padding:28px 24px;text-align:center;">
+      <div class="stat-num">0</div>
+      <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:6px;">Files Stored</div>
+    </div>
+    <div class="glass-sm" style="padding:28px 24px;text-align:center;">
+      <div class="stat-num">Free</div>
+      <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:6px;">No Key Needed</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Platform Showcase ──────────────────────────────────────────────── -->
+<section style="max-width:1100px;margin:0 auto 60px;padding:0 24px;position:relative;z-index:1;">
+  <h2 style="text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:8px;">How It Works</h2>
+  <p style="text-align:center;font-size:0.88rem;color:rgba(255,255,255,0.45);margin-bottom:32px;">Three steps to download any social video</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+    <div class="glass-sm" style="padding:28px 24px;">
+      <div style="font-size:2rem;margin-bottom:14px;">🔗</div>
+      <h3 style="font-weight:700;font-size:1rem;margin-bottom:8px;">1 · Paste URL</h3>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.6;">Copy the video link from Twitter, TikTok, Instagram, Facebook, YouTube or any of 1,000+ sites and paste it above.</p>
+    </div>
+    <div class="glass-sm" style="padding:28px 24px;">
+      <div style="font-size:2rem;margin-bottom:14px;">🎛</div>
+      <h3 style="font-weight:700;font-size:1rem;margin-bottom:8px;">2 · Choose Quality</h3>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.6;">Select Best, HD 720p, SD 480p, or Low 360p. Click <em>Get Video Info</em> to see all available formats.</p>
+    </div>
+    <div class="glass-sm" style="padding:28px 24px;">
+      <div style="font-size:2rem;margin-bottom:14px;">⬇</div>
+      <h3 style="font-weight:700;font-size:1rem;margin-bottom:8px;">3 · Download</h3>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.6;">Click the Download button to get a direct stream URL. Open it in the browser or use <code style="font-size:0.78rem;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">curl</code> / <code style="font-size:0.78rem;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">wget</code>.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── API Reference strip ─────────────────────────────────────────────── -->
+<section style="max-width:1100px;margin:0 auto 80px;padding:0 24px;position:relative;z-index:1;">
+  <div class="glass" style="padding:32px;">
+    <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:20px;">REST API Reference</h2>
+    <div style="display:grid;gap:14px;">
+      <!-- endpoint card -->
+      <div class="glass-xs" style="padding:16px 18px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+          <span style="background:rgba(99,102,241,0.25);color:#a5b4fc;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px;font-family:monospace;">GET</span>
+          <code style="font-size:0.85rem;color:#e0e7ff;">/api/video/info?url=&lt;VIDEO_URL&gt;</code>
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">API #49</span>
+        </div>
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);">Returns metadata (title, thumbnail, uploader, duration) and all available quality formats. No download happens.</p>
+      </div>
+      <div class="glass-xs" style="padding:16px 18px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+          <span style="background:rgba(16,185,129,0.2);color:#6ee7b7;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px;font-family:monospace;">GET</span>
+          <code style="font-size:0.85rem;color:#e0e7ff;">/api/video/download?url=&lt;URL&gt;&amp;quality=best</code>
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">API #50</span>
+        </div>
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);">Returns a direct stream URL for the requested quality. Optionally pass <code style="font-size:0.75rem;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">format_id</code> from the info endpoint.</p>
+      </div>
+      <div class="glass-xs" style="padding:16px 18px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+          <span style="background:rgba(99,102,241,0.25);color:#a5b4fc;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px;font-family:monospace;">GET</span>
+          <code style="font-size:0.85rem;color:#e0e7ff;">/api/video/supported-sites</code>
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">API #51</span>
+        </div>
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);">Lists highlighted supported platforms (1,000+ total via yt-dlp).</p>
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="/docs#/Social%20Video%20Downloader" target="_blank" class="btn-primary" style="font-size:0.82rem;padding:10px 20px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">📖 Full API Docs ↗</a>
+      <a href="/listing" style="font-size:0.82rem;padding:10px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7);text-decoration:none;transition:all 0.18s;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">← All 51 APIs</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Footer ─────────────────────────────────────────────────────────── -->
+<footer style="border-top:1px solid rgba(255,255,255,0.07);padding:32px 24px;text-align:center;position:relative;z-index:1;">
+  <div style="font-size:0.82rem;color:rgba(255,255,255,0.3);line-height:1.8;">
+    Built by <span style="color:rgba(167,139,250,0.9);font-weight:600;">Muhammad Kashif</span> &nbsp;·&nbsp;
+    Powered by <a href="https://github.com/yt-dlp/yt-dlp" target="_blank" style="color:rgba(96,165,250,0.7);text-decoration:none;">yt-dlp</a> &amp; <a href="https://fastapi.tiangolo.com" target="_blank" style="color:rgba(96,165,250,0.7);text-decoration:none;">FastAPI</a>
+    &nbsp;·&nbsp; For personal &amp; fair-use only.
+  </div>
+</footer>
+
+
+<!-- ── JavaScript ─────────────────────────────────────────────────────── -->
+<script>
+  let selectedQuality = 'best';
+  let lastInfo = null;
+
+  function setQuality(btn) {
+    document.querySelectorAll('.quality-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedQuality = btn.dataset.q;
+  }
+
+  function tryExample(url) {
+    document.getElementById('videoUrl').value = url;
+    fetchInfo();
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = '⚠ ' + msg;
+    box.style.display = 'block';
+  }
+  function clearError() { document.getElementById('errorBox').style.display = 'none'; }
+
+  function setLoading(on) {
+    const btn = document.getElementById('fetchBtn');
+    const spinner = document.getElementById('fetchSpinner');
+    const txt = document.getElementById('fetchBtnText');
+    btn.disabled = on;
+    spinner.classList.toggle('active', on);
+    txt.textContent = on ? 'Fetching…' : 'Get Video Info';
+  }
+
+  function formatBytes(b) {
+    if (!b) return '—';
+    if (b > 1024 * 1024 * 1024) return (b / 1073741824).toFixed(1) + ' GB';
+    if (b > 1024 * 1024)        return (b / 1048576).toFixed(1) + ' MB';
+    if (b > 1024)               return (b / 1024).toFixed(0) + ' KB';
+    return b + ' B';
+  }
+
+  function formatDuration(s) {
+    if (!s) return '—';
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (h) return `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+    return `${m}:${String(sec).padStart(2,'0')}`;
+  }
+
+  async function fetchInfo() {
+    const url = document.getElementById('videoUrl').value.trim();
+    if (!url) { showError('Please enter a video URL.'); return; }
+    clearError();
+    setLoading(true);
+    document.getElementById('resultArea').innerHTML = '';
+    lastInfo = null;
+
+    try {
+      const resp = await fetch(`/api/video/info?url=${encodeURIComponent(url)}`);
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        showError(data.detail || 'Failed to fetch video info.');
+        return;
+      }
+
+      lastInfo = data;
+      renderInfo(data);
+    } catch (e) {
+      showError('Network error: ' + e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function renderInfo(data) {
+    const area = document.getElementById('resultArea');
+    const thumbHtml = data.thumbnail
+      ? `<img src="${escHtml(data.thumbnail)}" alt="thumbnail"
+              style="width:100%;height:100%;object-fit:cover;border-radius:14px;" />`
+      : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;">🎬</div>`;
+
+    const formatsHtml = (data.formats || []).map(f => `
+      <div class="format-row" id="fmt-${escHtml(f.format_id)}">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:0.82rem;font-weight:600;color:#e0e7ff;min-width:56px;">${escHtml(f.label)}</span>
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">${escHtml(f.ext || '')} ${f.fps ? f.fps+'fps' : ''}</span>
+          ${f.has_video && f.has_audio ? '<span style="font-size:0.65rem;background:rgba(16,185,129,0.2);color:#6ee7b7;padding:2px 7px;border-radius:6px;">video+audio</span>' :
+            f.has_video ? '<span style="font-size:0.65rem;background:rgba(99,102,241,0.2);color:#a5b4fc;padding:2px 7px;border-radius:6px;">video</span>' :
+            '<span style="font-size:0.65rem;background:rgba(245,158,11,0.2);color:#fcd34d;padding:2px 7px;border-radius:6px;">audio</span>'}
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">${formatBytes(f.filesize)}</span>
+          <button class="btn-download" onclick="downloadFormat('${escHtml(f.format_id)}')" style="padding:6px 14px;font-size:0.75rem;">⬇ Download</button>
+        </div>
+      </div>`).join('');
+
+    area.innerHTML = `
+      <div class="result-card glass-sm" style="padding:24px;margin-top:4px;">
+        <!-- header: thumb + meta -->
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px;">
+          <div style="width:160px;height:100px;flex-shrink:0;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.05);">
+            ${thumbHtml}
+          </div>
+          <div style="flex:1;min-width:180px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+              <span style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(167,139,250,0.15);color:#c4b5fd;border:1px solid rgba(167,139,250,0.25);">
+                ${escHtml(data.platform || 'Unknown')}
+              </span>
+              <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">${data.formats_available || 0} formats available</span>
+            </div>
+            <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:8px;color:#f0f4ff;line-height:1.4;">
+              ${escHtml(data.title || 'Untitled')}
+            </h3>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;">
+              ${data.uploader ? `<span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">👤 ${escHtml(data.uploader)}</span>` : ''}
+              ${data.duration_seconds ? `<span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">⏱ ${formatDuration(data.duration_seconds)}</span>` : ''}
+              ${data.view_count ? `<span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">👁 ${Number(data.view_count).toLocaleString()}</span>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <!-- quick download button (uses selected quality) -->
+        <div style="margin-bottom:20px;">
+          <button class="btn-download" onclick="quickDownload()" id="quickDlBtn"
+                  style="width:100%;padding:13px;font-size:0.9rem;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:14px;">
+            <span class="spinner" id="dlSpinner"></span>
+            <span id="quickDlText">⬇ Download ${selectedQuality === 'best' ? 'Best Quality' : selectedQuality.toUpperCase()}</span>
+          </button>
+        </div>
+
+        <!-- formats list -->
+        ${data.formats && data.formats.length > 0 ? `
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Available Formats</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">${formatsHtml}</div>
+        </div>` : ''}
+      </div>`;
+  }
+
+  async function quickDownload() {
+    const url = document.getElementById('videoUrl').value.trim();
+    if (!url) return;
+    const dlBtn = document.getElementById('quickDlBtn');
+    const dlSpinner = document.getElementById('dlSpinner');
+    const dlTxt = document.getElementById('quickDlText');
+    dlBtn.disabled = true;
+    dlSpinner.classList.add('active');
+    dlTxt.textContent = 'Getting download URL…';
+    clearError();
+
+    try {
+      const resp = await fetch(`/api/video/download?url=${encodeURIComponent(url)}&quality=${selectedQuality}`);
+      const data = await resp.json();
+      if (!resp.ok) { showError(data.detail || 'Download URL fetch failed.'); return; }
+      openDownloadUrl(data);
+    } finally {
+      dlBtn.disabled = false;
+      dlSpinner.classList.remove('active');
+      dlTxt.textContent = `⬇ Download ${selectedQuality === 'best' ? 'Best Quality' : selectedQuality.toUpperCase()}`;
+    }
+  }
+
+  async function downloadFormat(formatId) {
+    const url = document.getElementById('videoUrl').value.trim();
+    if (!url) return;
+    clearError();
+
+    try {
+      const resp = await fetch(`/api/video/download?url=${encodeURIComponent(url)}&format_id=${encodeURIComponent(formatId)}`);
+      const data = await resp.json();
+      if (!resp.ok) { showError(data.detail || 'Download URL fetch failed.'); return; }
+      openDownloadUrl(data);
+    } catch (e) {
+      showError('Network error: ' + e.message);
+    }
+  }
+
+  function openDownloadUrl(data) {
+    if (!data.download_url) { showError('No direct URL found for this format.'); return; }
+    // Show a nice result panel with the download URL
+    const area = document.getElementById('resultArea');
+    const dlPanel = document.createElement('div');
+    dlPanel.style.cssText = 'margin-top:12px;animation:slideUp 0.35s cubic-bezier(.34,1.56,.64,1) forwards;opacity:0;';
+    dlPanel.className = 'glass-xs';
+    dlPanel.style.padding = '18px';
+    dlPanel.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:1.1rem;">✅</span>
+        <span style="font-size:0.88rem;font-weight:600;color:#6ee7b7;">Direct URL Ready!</span>
+        <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);">${escHtml(data.quality || '')} · ${escHtml(data.ext || 'mp4')}</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <a href="${escHtml(data.download_url)}" target="_blank"
+           style="font-size:0.82rem;font-weight:600;color:#fff;background:linear-gradient(135deg,#00b09b,#96c93d);padding:9px 20px;border-radius:10px;text-decoration:none;">
+          ⬇ Open / Save Video
+        </a>
+        <button onclick="copyUrl('${escAttr(data.download_url)}')"
+                style="font-size:0.82rem;color:rgba(255,255,255,0.65);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:9px 16px;cursor:pointer;">
+          📋 Copy URL
+        </button>
+      </div>
+      <p style="font-size:0.72rem;color:rgba(255,255,255,0.3);">
+        💡 Link may expire in a few minutes. If it fails, re-fetch.
+        curl: <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:0.7rem;">curl -L -o video.${escHtml(data.ext||'mp4')} "URL"</code>
+      </p>`;
+
+    // Insert before the existing result card
+    const existing = area.querySelector('.result-card');
+    if (existing) {
+      area.insertBefore(dlPanel, existing);
+    } else {
+      area.appendChild(dlPanel);
+    }
+    dlPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function copyUrl(url) {
+    navigator.clipboard.writeText(url).then(() => {
+      // brief toast
+      const t = document.createElement('div');
+      t.textContent = '✅ URL copied to clipboard!';
+      t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(16,185,129,0.9);color:#fff;padding:10px 22px;border-radius:10px;font-size:0.85rem;z-index:1000;animation:slideUp 0.3s ease';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2800);
+    });
+  }
+
+  function escHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(s) {
+    if (!s) return '';
+    return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+</script>
+
+</body>
+</html>

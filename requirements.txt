@@ -58,6 +58,9 @@ Faker==25.2.0
 # (CVE has no patch). We use rembg only as a Python library (not its server),
 # but it is excluded from the default install until a patched version is released.
 
+# Social video downloader
+yt-dlp==2026.3.17
+
 # Markdown / utils
 markdown2==2.4.13
 python-dotenv==1.0.1
