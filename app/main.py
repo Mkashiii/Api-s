@@ -1,5 +1,5 @@
 """
-RapidAPI Platform — Main FastAPI Application
+Muhammad Kashif API Platform — Main FastAPI Application
 48 Production-Ready APIs with Admin + User Authentication
 """
 import os
@@ -29,8 +29,8 @@ from app.routers.video_downloader import router as video_router
 # ── App setup ─────────────────────────────────────────────────────────────────
 
 app = FastAPI(
-    title="RapidAPI Platform — 48 APIs",
-    description="Build & Sell 48 Production-Ready APIs on RapidAPI",
+    title="Muhammad Kashif API Platform — 48 APIs",
+    description="48 Production-Ready APIs by Muhammad Kashif",
     version="2026.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -38,8 +38,8 @@ app = FastAPI(
 
 app.add_middleware(
     SessionMiddleware,
-    secret_key="rapidapi-session-secret-2026",
-    session_cookie="rapidapi_session",
+    secret_key="mk-api-session-secret-2026",
+    session_cookie="mk_api_session",
     max_age=86400,
 )
 
@@ -94,7 +94,7 @@ def startup():
         if not db.query(User).filter(User.username == "admin").first():
             admin = User(
                 username="admin",
-                email="admin@rapidapi.local",
+                email="admin@mkapis.local",
                 hashed_password=hash_password("admin123"),
                 role="admin",
                 api_key=generate_api_key(),
@@ -105,7 +105,7 @@ def startup():
         if not db.query(User).filter(User.username == "user").first():
             demo = User(
                 username="user",
-                email="user@rapidapi.local",
+                email="user@mkapis.local",
                 hashed_password=hash_password("user123"),
                 role="user",
                 api_key=generate_api_key(),

@@ -22,7 +22,7 @@ def geocode(
         if address:
             url = "https://nominatim.openstreetmap.org/search"
             resp = requests.get(url, params={"q": address, "format": "json", "limit": 5},
-                                headers={"User-Agent": "RapidAPI-Platform/1.0"}, timeout=10)
+                                headers={"User-Agent": "MK-API-Platform/1.0"}, timeout=10)
             data = resp.json()
             results = [
                 {
@@ -45,7 +45,7 @@ def geocode(
         elif lat is not None and lon is not None:
             url = "https://nominatim.openstreetmap.org/reverse"
             resp = requests.get(url, params={"lat": lat, "lon": lon, "format": "json"},
-                                headers={"User-Agent": "RapidAPI-Platform/1.0"}, timeout=10)
+                                headers={"User-Agent": "MK-API-Platform/1.0"}, timeout=10)
             data = resp.json()
             addr = data.get("address", {})
             return {

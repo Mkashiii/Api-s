@@ -375,7 +375,7 @@ _CANNED_RESPONSES = {
     "thanks": "You're welcome! Is there anything else I can help you with?",
     "bye": "Goodbye! Have a great day!",
     "what is your name": "I'm RapidBot, your AI assistant.",
-    "who are you": "I'm RapidBot, built on the RapidAPI platform.",
+    "who are you": "I'm MK Bot, built on Muhammad Kashif's API platform.",
 }
 
 @router.post("/chatbot", summary="08 · AI Chatbot / Conversational API")

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}48 APIs — RapidAPI Platform 2026{% endblock %}
+{% block title %}48 APIs — Muhammad Kashif Platform 2026{% endblock %}
 {% block body %}
 
 {% macro api_card(api, cat) %}
@@ -40,7 +40,7 @@
 {% endmacro %}
 
 <!-- Nav -->
-<nav class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+<nav class="sticky top-0 z-50" style="background:rgba(255,255,255,0.85);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(0,0,0,0.08);">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center">
@@ -48,7 +48,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
         </svg>
       </div>
-      <span class="text-lg font-bold text-gray-900">RapidAPI Platform</span>
+      <span class="text-lg font-bold text-gray-900">Muhammad Kashif</span>
       <span class="hidden sm:inline text-xs text-gray-400 font-medium border border-gray-200 rounded-full px-2 py-0.5">2026</span>
     </div>
     <div class="flex items-center gap-3">
@@ -74,18 +74,18 @@
 </nav>
 
 <!-- Hero -->
-<section class="bg-gradient-to-br from-white via-blue-50 to-indigo-50 border-b border-gray-100 py-16 px-4">
+<section class="py-16 px-4" style="background:linear-gradient(160deg,#f5f5f7 0%,#ffffff 40%,rgba(0,122,255,0.04) 100%);border-bottom:1px solid rgba(0,0,0,0.06);">
   <div class="max-w-4xl mx-auto text-center">
-    <div class="inline-flex items-center gap-2 text-xs font-semibold text-brand-700 bg-brand-100 border border-brand-200 rounded-full px-3 py-1 mb-4">
-      <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-      2026 Edition — Production Ready
+    <div class="inline-flex items-center gap-2 text-xs font-semibold rounded-full px-3 py-1 mb-4" style="background:rgba(0,122,255,0.08);border:1px solid rgba(0,122,255,0.2);color:#007AFF;">
+      <span class="w-2 h-2 rounded-full animate-pulse" style="background:#007AFF;"></span>
+      2026 Edition · Muhammad Kashif
     </div>
-    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
-      51 APIs to Build<br/>
-      <span class="text-brand-600">&amp; Sell on RapidAPI</span>
+    <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight mb-4" style="color:#1d1d1f;letter-spacing:-1px;">
+      51 APIs — Built by<br/>
+      <span style="background:linear-gradient(135deg,#007AFF,#5856d6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Muhammad Kashif</span>
     </h1>
     <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-      Trending · High Demand · Production-Ready. All built with Python. Start earning recurring income today.
+      Trending · High Demand · Production-Ready. All built with Python by Muhammad Kashif.
     </p>
     <!-- ✨ Video Downloader feature banner -->
     <div class="mb-6">
@@ -107,14 +107,14 @@
       </div>
       <div class="bg-white rounded-xl border border-gray-200 px-5 py-3 shadow-sm flex items-center gap-2">
         <span class="text-2xl font-bold text-brand-600">100k+</span>
-        <span class="text-gray-600">RapidAPI Devs</span>
+        <span class="text-gray-600">API Users</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Category nav pills -->
-<div class="bg-white border-b border-gray-100 sticky top-16 z-40">
+<div class="sticky top-16 z-40" style="background:rgba(255,255,255,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.06);">
   <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2 overflow-x-auto scrollbar-hide">
     <button onclick="filterCat('all')" id="pill-all"
       class="cat-pill flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border border-brand-200 bg-brand-600 text-white transition">
@@ -218,7 +218,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="grid-scraping">
       {% set scraping_apis = [
         {"num":"09","title":"Web Scraper / Data Extractor","badge":"hot","badge_label":"#1 Most Sold","buyers":"Price monitors, research tools, data brokers","difficulty":"Hard","profit":5,"tip":"Proxy rotation + CAPTCHA solving built in","endpoint":"/api/scraping/web-scraper","method":"POST"},
-        {"num":"10","title":"LinkedIn Profile Scraper","badge":"hot","badge_label":"Top Earner","buyers":"B2B lead gen, recruiters, sales intel","difficulty":"Hard","profit":5,"tip":"Consistently highest revenue API on RapidAPI","endpoint":"/api/scraping/linkedin","method":"GET"},
+        {"num":"10","title":"LinkedIn Profile Scraper","badge":"hot","badge_label":"Top Earner","buyers":"B2B lead gen, recruiters, sales intel","difficulty":"Hard","profit":5,"tip":"One of the highest revenue API categories","endpoint":"/api/scraping/linkedin","method":"GET"},
         {"num":"11","title":"Amazon Product Data","badge":"rising","badge_label":"↑ Rising","buyers":"Price comparison, affiliate marketers","difficulty":"Hard","profit":5,"tip":"Price drop alert webhook for conversions","endpoint":"/api/scraping/amazon-product","method":"GET"},
         {"num":"12","title":"Google SERP Scraper","badge":"hot","badge_label":"Hot","buyers":"SEO tools, rank trackers, content research","difficulty":"Hard","profit":5,"tip":"Support Image + News + Maps results","endpoint":"/api/scraping/google-serp","method":"GET"},
         {"num":"13","title":"Indeed / Jobs Scraper","badge":"rising","badge_label":"↑ Rising","buyers":"Job aggregators, HR analytics, career apps","difficulty":"Medium–Hard","profit":4,"tip":"Add salary data extraction","endpoint":"/api/scraping/jobs","method":"GET"},
@@ -334,7 +334,7 @@
       {% set health_apis = [
         {"num":"34","title":"Food & Nutrition Data","badge":"steady","badge_label":"Steady","buyers":"Fitness apps, diet trackers, recipe platforms","difficulty":"Medium","profit":4,"tip":"Barcode lookup = full meal-logging solution","endpoint":"/api/lifestyle/nutrition","method":"GET"},
         {"num":"35","title":"Recipe Search & Ingredient Parser","badge":"rising","badge_label":"↑ Rising","buyers":"Meal planning, grocery delivery, smart kitchen","difficulty":"Medium","profit":3,"tip":"'What can I cook?' endpoint = extremely popular","endpoint":"/api/lifestyle/recipes","method":"GET"},
-        {"num":"36","title":"Flight & Hotel Price","badge":"rising","badge_label":"↑ Rising","buyers":"Travel comparison, booking tools, corporate travel","difficulty":"Hard","profit":5,"tip":"#1 most-used API on all of RapidAPI","endpoint":"/api/lifestyle/flights","method":"GET"},
+        {"num":"36","title":"Flight & Hotel Price","badge":"rising","badge_label":"↑ Rising","buyers":"Travel comparison, booking tools, corporate travel","difficulty":"Hard","profit":5,"tip":"#1 most-used API category in travel","endpoint":"/api/lifestyle/flights","method":"GET"},
         {"num":"37","title":"Exercise & Workout Database","badge":"steady","badge_label":"Steady","buyers":"Gym apps, PT platforms, wearable integrations","difficulty":"Easy","profit":3,"tip":"AI workout plan generator = natural upsell","endpoint":"/api/lifestyle/exercises","method":"GET"},
         {"num":"38","title":"Medical Drug Information","badge":"steady","badge_label":"Steady","buyers":"Healthcare apps, pharmacy, EMR, telehealth","difficulty":"Hard","profit":4,"tip":"HIPAA compliance docs = enterprise conversions","endpoint":"/api/lifestyle/drugs","method":"GET"},
       ] %}
@@ -379,7 +379,7 @@
       {% set entertainment_apis = [
         {"num":"43","title":"Sports Scores & Live Data","badge":"hot","badge_label":"Hot","buyers":"Sports apps, fantasy sports, betting, news","difficulty":"Medium–Hard","profit":5,"tip":"Cricket + football combined dominates demand","endpoint":"/api/entertainment/sports/football","method":"GET"},
         {"num":"44","title":"Movie & TV Show Data","badge":"steady","badge_label":"Steady","buyers":"Streaming guides, recommendation engines","difficulty":"Medium","profit":3,"tip":"'Where to watch' streaming availability = #1 feature","endpoint":"/api/entertainment/movies","method":"GET"},
-        {"num":"45","title":"Random Quote / Fact / Joke","badge":"steady","badge_label":"Easy Start","buyers":"Productivity apps, screensavers, chatbot fillers","difficulty":"Easy","profit":2,"tip":"Great beginner API for first RapidAPI reviews","endpoint":"/api/entertainment/random/quote","method":"GET"},
+        {"num":"45","title":"Random Quote / Fact / Joke","badge":"steady","badge_label":"Easy Start","buyers":"Productivity apps, screensavers, chatbot fillers","difficulty":"Easy","profit":2,"tip":"Great beginner API to build user engagement","endpoint":"/api/entertainment/random/quote","method":"GET"},
         {"num":"46","title":"E-commerce Product Recommendation","badge":"rising","badge_label":"↑ Rising","buyers":"Online stores, Shopify apps, retail analytics","difficulty":"Hard","profit":5,"tip":"Personalisation APIs = highest subscription prices","endpoint":"/api/entertainment/recommendations","method":"POST"},
         {"num":"47","title":"Fake Data / Test Data Generator","badge":"steady","badge_label":"Steady","buyers":"QA teams, app developers, demo environments","difficulty":"Easy","profit":3,"tip":"Locale-specific data fills a real gap","endpoint":"/api/entertainment/fake-data","method":"GET"},
         {"num":"48","title":"Background Removal / Image AI","badge":"hot","badge_label":"↑ Fast Rising","buyers":"Photo editors, e-commerce, social media tools","difficulty":"Medium–Hard","profit":5,"tip":"Bulk processing (100+ images) = enterprise","endpoint":"/api/entertainment/background-remove","method":"POST"},
@@ -430,7 +430,7 @@
 
   <section class="mb-12">
     <div class="bg-gradient-to-br from-brand-600 to-indigo-700 rounded-2xl p-8 text-white">
-      <h2 class="text-2xl font-bold mb-6">🚀 How to Launch on RapidAPI</h2>
+      <h2 class="text-2xl font-bold mb-6">🚀 How to Launch Your API Platform</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {% for tip in [
           {"num":"1","title":"Start with 1–3 APIs","desc":"Pick highest demand + your skill set. Don't build all 48 at once."},
@@ -439,7 +439,7 @@
           {"num":"4","title":"Docs are everything","desc":"APIs with great docs convert 3× better. Include examples in 5 languages."},
           {"num":"5","title":"Speed matters","desc":"Under 300ms response time. Developers abandon slow APIs immediately."},
           {"num":"6","title":"Reliability > features","desc":"99.9% uptime builds trust. Use a status page to show your track record."},
-          {"num":"7","title":"Respond to reviews","desc":"RapidAPI ranks APIs partly on engagement. Respond within 24 hours."},
+          {"num":"7","title":"Respond to reviews","desc":"Engagement is key. Respond to user feedback and reviews within 24 hours."},
           {"num":"8","title":"Combine trending APIs","desc":"Bundle Scraper + Summariser + Sentiment as 'Research Suite' for premium."},
         ] %}
         <div class="bg-white/10 backdrop-blur rounded-xl p-4">
@@ -455,22 +455,22 @@
 </main>
 
 <!-- Footer -->
-<footer class="bg-gray-50 border-t border-gray-200 py-8 px-4">
+<footer class="py-8 px-4" style="background:rgba(255,255,255,0.8);backdrop-filter:blur(16px);border-top:1px solid rgba(0,0,0,0.06);">
   <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
     <div class="flex items-center gap-2">
-      <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center">
+      <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#007AFF,#5856d6);">
         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
         </svg>
       </div>
-      <span class="text-sm font-semibold text-gray-700">RapidAPI Platform 2026</span>
+      <span class="text-sm font-semibold" style="color:#1d1d1f;">Muhammad Kashif 2026</span>
     </div>
     <div class="flex items-center gap-6 text-sm text-gray-500">
       <a href="/docs" class="hover:text-brand-600 transition">API Docs</a>
       <a href="/login" class="hover:text-brand-600 transition">Sign In</a>
       <a href="/register" class="hover:text-brand-600 transition">Register</a>
     </div>
-    <p class="text-xs text-gray-400">Built by Muhammad Kashif · Python · FastAPI · Tailwind CSS</p>
+    <p class="text-xs" style="color:#aeaeb2;">Crafted by <strong style="color:#86868b;">Muhammad Kashif</strong> · Python · FastAPI · Tailwind CSS</p>
   </div>
 </footer>
 
