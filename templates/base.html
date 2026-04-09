@@ -3,34 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}RapidAPI Platform{% endblock %}</title>
+  <title>{% block title %}Muhammad Kashif — API Platform{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', "'SF Pro Display'", "'SF Pro Text'", 'Inter', 'sans-serif'],
+          },
           colors: {
-            brand: { 50:'#eff6ff', 100:'#dbeafe', 200:'#bfdbfe', 300:'#93c5fd',
-                     400:'#60a5fa', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8',
-                     800:'#1e40af', 900:'#1e3a8a' }
+            brand: {
+              50:  '#f0f7ff',
+              100: '#e0efff',
+              200: '#c0dfff',
+              300: '#91c6ff',
+              400: '#5aa8ff',
+              500: '#007AFF',
+              600: '#0062cc',
+              700: '#0051aa',
+              800: '#003d82',
+              900: '#002a5c'
+            }
           }
         }
       }
     }
   </script>
   <style>
-    body { background-color: #ffffff; color: #1e293b; }
-    .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; }
-    .badge-hot { background:#fef2f2; color:#dc2626; }
-    .badge-rising { background:#fff7ed; color:#ea580c; }
-    .badge-steady { background:#f0fdf4; color:#16a34a; }
-    .sidebar-link { transition: all 0.15s; }
-    .sidebar-link:hover { background:#eff6ff; color:#2563eb; }
-    .sidebar-link.active { background:#dbeafe; color:#1d4ed8; font-weight:600; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Apple Glass Card ── */
+    .card {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+    }
+    .card-solid {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ── Badges ── */
+    .badge-hot     { background: rgba(255, 59, 48, 0.1);  color: #ff3b30; }
+    .badge-rising  { background: rgba(255, 149, 0, 0.1);  color: #ff9500; }
+    .badge-steady  { background: rgba(52, 199, 89, 0.1);  color: #34c759; }
+
+    /* ── Sidebar ── */
+    .sidebar-link { transition: all 0.15s ease; border-radius: 10px; }
+    .sidebar-link:hover  { background: rgba(0, 122, 255, 0.08); color: #007AFF; }
+    .sidebar-link.active { background: rgba(0, 122, 255, 0.12); color: #007AFF; font-weight: 600; }
+
+    /* ── Scrollbar hide ── */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ── Smooth transitions ── */
+    a, button { transition: all 0.15s ease; }
   </style>
   {% block head %}{% endblock %}
 </head>
-<body class="min-h-screen bg-white">
+<body class="min-h-screen" style="background: linear-gradient(160deg, #f5f5f7 0%, #ffffff 50%, #f0f4ff 100%); background-attachment: fixed;">
   {% block body %}{% endblock %}
 </body>
 </html>

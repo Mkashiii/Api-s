@@ -1,53 +1,83 @@
 {% extends "base.html" %}
-{% block title %}Register — RapidAPI Platform{% endblock %}
+{% block title %}Create Account — Muhammad Kashif APIs{% endblock %}
 {% block body %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
-  <div class="w-full max-w-md">
+<div class="min-h-screen flex items-center justify-center p-4">
 
+  <!-- Background decorative blobs -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(88,86,214,0.1),transparent 70%);top:-200px;right:-100px;"></div>
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,122,255,0.08),transparent 70%);bottom:-150px;left:-100px;"></div>
+  </div>
+
+  <div class="w-full max-w-md relative z-10">
+
+    <!-- Logo / Brand -->
     <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-600 shadow-lg mb-4">
-        <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
+           style="background:linear-gradient(135deg,#5856d6,#007AFF);box-shadow:0 8px 32px rgba(88,86,214,0.3);">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
         </svg>
       </div>
-      <h1 class="text-3xl font-bold text-gray-900">Create Account</h1>
-      <p class="text-gray-500 mt-1">Join the RapidAPI Platform</p>
+      <h1 class="text-3xl font-bold" style="color:#1d1d1f;letter-spacing:-0.5px;">Create Account</h1>
+      <p style="color:#86868b;margin-top:4px;font-size:15px;">Join Muhammad Kashif API Platform</p>
     </div>
 
-    <div class="card p-8 shadow-xl">
+    <!-- Glass Card -->
+    <div class="card p-8" style="background:rgba(255,255,255,0.85);backdrop-filter:blur(24px) saturate(200%);-webkit-backdrop-filter:blur(24px) saturate(200%);">
+
       {% if error %}
-      <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">{{ error }}</div>
+      <div class="mb-5 p-3 rounded-xl text-sm"
+           style="background:rgba(255,59,48,0.08);border:1px solid rgba(255,59,48,0.2);color:#ff3b30;">
+        {{ error }}
+      </div>
       {% endif %}
 
       <form method="POST" action="/register" class="space-y-4">
+
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Username</label>
+          <label class="block text-sm font-medium mb-1.5" style="color:#3a3a3c;">Username</label>
           <input type="text" name="username" required placeholder="Choose a username"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"/>
+            style="width:100%;padding:12px 16px;border-radius:12px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.7);font-size:15px;color:#1d1d1f;outline:none;transition:all 0.2s;"
+            onfocus="this.style.borderColor='rgba(88,86,214,0.5)';this.style.boxShadow='0 0 0 3px rgba(88,86,214,0.1)';"
+            onblur="this.style.borderColor='rgba(0,0,0,0.1)';this.style.boxShadow='none';"/>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+          <label class="block text-sm font-medium mb-1.5" style="color:#3a3a3c;">Email</label>
           <input type="email" name="email" required placeholder="your@email.com"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"/>
+            style="width:100%;padding:12px 16px;border-radius:12px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.7);font-size:15px;color:#1d1d1f;outline:none;transition:all 0.2s;"
+            onfocus="this.style.borderColor='rgba(88,86,214,0.5)';this.style.boxShadow='0 0 0 3px rgba(88,86,214,0.1)';"
+            onblur="this.style.borderColor='rgba(0,0,0,0.1)';this.style.boxShadow='none';"/>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
-          <input type="password" name="password" required placeholder="Choose a password"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-gray-900 placeholder-gray-400 bg-white transition"/>
+          <label class="block text-sm font-medium mb-1.5" style="color:#3a3a3c;">Password</label>
+          <input type="password" name="password" required placeholder="Choose a strong password"
+            style="width:100%;padding:12px 16px;border-radius:12px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.7);font-size:15px;color:#1d1d1f;outline:none;transition:all 0.2s;"
+            onfocus="this.style.borderColor='rgba(88,86,214,0.5)';this.style.boxShadow='0 0 0 3px rgba(88,86,214,0.1)';"
+            onblur="this.style.borderColor='rgba(0,0,0,0.1)';this.style.boxShadow='none';"/>
         </div>
 
         <button type="submit"
-          class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition shadow-sm text-sm mt-2">
+          style="width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#5856d6,#007AFF);color:#fff;font-weight:600;font-size:15px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(88,86,214,0.3);margin-top:8px;"
+          onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(88,86,214,0.4)';"
+          onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(88,86,214,0.3)';">
           Create Account
         </button>
       </form>
 
-      <div class="mt-4 text-center text-sm text-gray-500">
-        Already have an account? <a href="/login" class="text-brand-600 hover:underline font-medium">Sign in</a>
+      <div class="mt-5 text-center text-sm" style="color:#86868b;">
+        Already have an account?
+        <a href="/login" style="color:#007AFF;font-weight:500;text-decoration:none;"
+           onmouseover="this.style.textDecoration='underline';"
+           onmouseout="this.style.textDecoration='none';">Sign in</a>
       </div>
     </div>
+
+    <p class="text-center text-xs mt-6" style="color:#aeaeb2;">
+      Crafted by <strong style="color:#86868b;">Muhammad Kashif</strong>
+    </p>
   </div>
 </div>
 {% endblock %}

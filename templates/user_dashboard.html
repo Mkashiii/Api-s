@@ -1,38 +1,43 @@
 {% extends "base.html" %}
-{% block title %}My Dashboard — RapidAPI Platform{% endblock %}
+{% block title %}My Dashboard — Muhammad Kashif APIs{% endblock %}
 {% block body %}
 
-<div class="flex h-screen bg-gray-50">
-  <!-- Sidebar -->
-  <aside class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
-    <div class="p-5 border-b border-gray-100">
+<div class="flex h-screen" style="background:linear-gradient(160deg,#f5f5f7 0%,#ffffff 60%,#f0f4ff 100%);">
+
+  <!-- ── Sidebar ── -->
+  <aside class="w-64 flex flex-col flex-shrink-0"
+    style="background:rgba(255,255,255,0.82);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-right:1px solid rgba(0,0,0,0.06);">
+
+    <!-- Brand -->
+    <div class="p-5" style="border-bottom:1px solid rgba(0,0,0,0.05);">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center"
+             style="background:linear-gradient(135deg,#007AFF,#5856d6);box-shadow:0 4px 12px rgba(0,122,255,0.3);">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
           </svg>
         </div>
         <div>
-          <div class="text-sm font-bold text-gray-900">RapidAPI</div>
-          <div class="text-xs text-gray-500">Platform 2026</div>
+          <div class="text-sm font-bold" style="color:#1d1d1f;">Muhammad Kashif</div>
+          <div class="text-xs" style="color:#86868b;">API Platform 2026</div>
         </div>
       </div>
     </div>
 
     <nav class="flex-1 p-4 space-y-1">
-      <a href="/dashboard" class="sidebar-link active flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm">
+      <a href="/dashboard" class="sidebar-link active flex items-center gap-2.5 px-3 py-2 text-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
         </svg>
         Dashboard
       </a>
-      <a href="/listing" class="sidebar-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-600">
+      <a href="/listing" class="sidebar-link flex items-center gap-2.5 px-3 py-2 text-sm" style="color:#3a3a3c;">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
-        Browse 48 APIs
+        Browse APIs
       </a>
-      <a href="/docs" target="_blank" class="sidebar-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-600">
+      <a href="/docs" target="_blank" class="sidebar-link flex items-center gap-2.5 px-3 py-2 text-sm" style="color:#3a3a3c;">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
@@ -40,17 +45,21 @@
       </a>
     </nav>
 
-    <div class="p-4 border-t border-gray-100">
+    <div class="p-4" style="border-top:1px solid rgba(0,0,0,0.05);">
       <div class="flex items-center gap-3 mb-3 px-2">
-        <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold text-sm">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+             style="background:linear-gradient(135deg,rgba(0,122,255,0.15),rgba(88,86,214,0.15));color:#007AFF;">
           {{ user.username[0]|upper }}
         </div>
         <div>
-          <div class="text-sm font-medium text-gray-900">{{ user.username }}</div>
-          <div class="text-xs text-gray-500 capitalize">{{ user.role }}</div>
+          <div class="text-sm font-medium" style="color:#1d1d1f;">{{ user.username }}</div>
+          <div class="text-xs capitalize" style="color:#86868b;">{{ user.role }}</div>
         </div>
       </div>
-      <a href="/logout" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-600 hover:bg-red-50 transition">
+      <a href="/logout" class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition"
+         style="color:#ff3b30;"
+         onmouseover="this.style.background='rgba(255,59,48,0.08)';"
+         onmouseout="this.style.background='transparent';">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
         </svg>
@@ -59,19 +68,20 @@
     </div>
   </aside>
 
-  <!-- Main Content -->
+  <!-- ── Main Content ── -->
   <div class="flex-1 flex flex-col overflow-hidden">
 
     <!-- Top bar -->
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+    <header style="background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;">
       <div>
-        <h1 class="text-lg font-bold text-gray-900">My Dashboard</h1>
-        <p class="text-sm text-gray-500">Welcome back, <strong>{{ user.username }}</strong></p>
+        <h1 class="text-lg font-bold" style="color:#1d1d1f;letter-spacing:-0.3px;">My Dashboard</h1>
+        <p class="text-sm" style="color:#86868b;">Welcome back, <strong style="color:#3a3a3c;">{{ user.username }}</strong></p>
       </div>
       <div class="flex items-center gap-3">
-        <a href="/listing" class="text-sm text-brand-600 hover:underline font-medium">Browse APIs</a>
+        <a href="/listing" class="text-sm font-medium" style="color:#007AFF;text-decoration:none;">Browse APIs</a>
         <a href="/docs" target="_blank"
-          class="text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-lg transition">
+          class="text-sm font-semibold text-white px-4 py-2 rounded-xl"
+          style="background:linear-gradient(135deg,#007AFF,#5856d6);box-shadow:0 4px 12px rgba(0,122,255,0.25);text-decoration:none;">
           Open API Docs
         </a>
       </div>
@@ -81,18 +91,24 @@
     <div class="flex-1 overflow-y-auto p-6">
 
       <!-- API Key card -->
-      <div class="card p-5 mb-6 border-brand-200 bg-gradient-to-r from-blue-50 to-white">
+      <div class="card p-5 mb-6" style="background:linear-gradient(135deg,rgba(0,122,255,0.06),rgba(88,86,214,0.06));">
         <div class="flex items-start justify-between">
           <div>
-            <h2 class="font-semibold text-gray-900 mb-1">Your API Key</h2>
-            <p class="text-xs text-gray-500 mb-3">Use this key in the <code>X-API-Key</code> header for all requests.</p>
+            <h2 class="font-semibold mb-1" style="color:#1d1d1f;">Your API Key</h2>
+            <p class="text-xs mb-3" style="color:#86868b;">Use this key in the <code style="background:rgba(0,122,255,0.1);padding:1px 5px;border-radius:4px;color:#007AFF;">X-API-Key</code> header for all requests.</p>
             <div class="flex items-center gap-2">
-              <code id="api-key-display" class="text-xs bg-white border border-gray-300 rounded-lg px-3 py-2 font-mono text-gray-800 select-all">{{ db_user.api_key }}</code>
-              <button onclick="copyKey()" class="text-xs bg-brand-600 text-white px-3 py-2 rounded-lg hover:bg-brand-700 transition font-medium">Copy</button>
+              <code id="api-key-display" class="text-xs rounded-xl px-3 py-2 font-mono select-all"
+                    style="background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.08);color:#3a3a3c;">{{ db_user.api_key }}</code>
+              <button onclick="copyKey()"
+                class="text-xs px-3 py-2 rounded-xl font-semibold text-white"
+                style="background:linear-gradient(135deg,#007AFF,#5856d6);border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,122,255,0.25);">
+                Copy
+              </button>
             </div>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-brand-100 flex items-center justify-center">
-            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style="background:linear-gradient(135deg,rgba(0,122,255,0.1),rgba(88,86,214,0.1));">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#007AFF;">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
             </svg>
           </div>
@@ -102,30 +118,30 @@
       <!-- Quick stats -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div class="card p-4">
-          <div class="text-xs text-gray-500 mb-1">Total API Calls</div>
-          <div class="text-2xl font-bold text-gray-900">{{ recent_calls|length }}</div>
-          <div class="text-xs text-green-600 mt-1">↑ Lifetime</div>
+          <div class="text-xs font-medium mb-1" style="color:#86868b;">Total API Calls</div>
+          <div class="text-2xl font-bold" style="color:#1d1d1f;">{{ recent_calls|length }}</div>
+          <div class="text-xs mt-1" style="color:#34c759;">↑ Lifetime</div>
         </div>
         <div class="card p-4">
-          <div class="text-xs text-gray-500 mb-1">APIs Available</div>
-          <div class="text-2xl font-bold text-brand-600">48</div>
-          <div class="text-xs text-gray-500 mt-1">Production ready</div>
+          <div class="text-xs font-medium mb-1" style="color:#86868b;">APIs Available</div>
+          <div class="text-2xl font-bold" style="color:#007AFF;">48</div>
+          <div class="text-xs mt-1" style="color:#86868b;">Production ready</div>
         </div>
         <div class="card p-4">
-          <div class="text-xs text-gray-500 mb-1">Categories</div>
-          <div class="text-2xl font-bold text-gray-900">9</div>
-          <div class="text-xs text-gray-500 mt-1">All covered</div>
+          <div class="text-xs font-medium mb-1" style="color:#86868b;">Categories</div>
+          <div class="text-2xl font-bold" style="color:#1d1d1f;">9</div>
+          <div class="text-xs mt-1" style="color:#86868b;">All covered</div>
         </div>
         <div class="card p-4">
-          <div class="text-xs text-gray-500 mb-1">Account Status</div>
-          <div class="text-2xl font-bold text-green-600">Active</div>
-          <div class="text-xs text-gray-500 mt-1">All access</div>
+          <div class="text-xs font-medium mb-1" style="color:#86868b;">Account Status</div>
+          <div class="text-2xl font-bold" style="color:#34c759;">Active</div>
+          <div class="text-xs mt-1" style="color:#86868b;">Full access</div>
         </div>
       </div>
 
       <!-- Quick API Try -->
       <div class="card p-6 mb-6">
-        <h2 class="font-bold text-gray-900 mb-4">Quick API Test</h2>
+        <h2 class="font-bold mb-4" style="color:#1d1d1f;">Quick API Test</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {% set quick_apis = [
             {"name":"Sentiment Analysis","url":"/api/ai/sentiment","method":"POST","body":{"text":"I love this platform! It is amazing."}},
@@ -137,9 +153,12 @@
           ] %}
           {% for qa in quick_apis %}
           <button onclick="tryAPI('{{ qa.url }}','{{ qa.method }}',{{ qa.body|tojson }},'{{ qa.name }}')"
-            class="text-left p-3 rounded-lg border border-gray-200 hover:border-brand-300 hover:bg-brand-50 transition group">
-            <div class="text-xs font-semibold text-gray-900 group-hover:text-brand-700">{{ qa.name }}</div>
-            <div class="text-xs text-gray-500 mt-1 font-mono truncate">{{ qa.method }} {{ qa.url }}</div>
+            class="text-left p-3 rounded-xl transition"
+            style="border:1px solid rgba(0,0,0,0.06);background:rgba(255,255,255,0.6);cursor:pointer;"
+            onmouseover="this.style.background='rgba(0,122,255,0.06)';this.style.borderColor='rgba(0,122,255,0.2)';"
+            onmouseout="this.style.background='rgba(255,255,255,0.6)';this.style.borderColor='rgba(0,0,0,0.06)';">
+            <div class="text-xs font-semibold" style="color:#1d1d1f;">{{ qa.name }}</div>
+            <div class="text-xs mt-1 font-mono truncate" style="color:#86868b;">{{ qa.method }} {{ qa.url }}</div>
           </button>
           {% endfor %}
         </div>
@@ -147,38 +166,39 @@
         <!-- Response display -->
         <div id="api-response" class="mt-4 hidden">
           <div class="flex items-center justify-between mb-2">
-            <span id="res-label" class="text-xs font-semibold text-gray-700"></span>
+            <span id="res-label" class="text-xs font-semibold" style="color:#3a3a3c;"></span>
             <span id="res-status" class="text-xs font-semibold"></span>
           </div>
-          <pre id="res-body" class="text-xs bg-gray-900 text-green-300 rounded-xl p-4 overflow-auto max-h-64 font-mono"></pre>
+          <pre id="res-body" class="text-xs rounded-2xl p-4 overflow-auto max-h-64 font-mono"
+               style="background:#1d1d1f;color:#30d158;"></pre>
         </div>
       </div>
 
       <!-- Recent calls -->
       <div class="card p-6">
-        <h2 class="font-bold text-gray-900 mb-4">Recent API Calls</h2>
+        <h2 class="font-bold mb-4" style="color:#1d1d1f;">Recent API Calls</h2>
         {% if recent_calls %}
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-gray-200">
-                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">API</th>
-                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Endpoint</th>
-                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Status</th>
-                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Time</th>
+              <tr style="border-bottom:1px solid rgba(0,0,0,0.06);">
+                <th class="text-left py-2 px-3 text-xs font-semibold" style="color:#86868b;">API</th>
+                <th class="text-left py-2 px-3 text-xs font-semibold" style="color:#86868b;">Endpoint</th>
+                <th class="text-left py-2 px-3 text-xs font-semibold" style="color:#86868b;">Status</th>
+                <th class="text-left py-2 px-3 text-xs font-semibold" style="color:#86868b;">Time</th>
               </tr>
             </thead>
             <tbody>
               {% for call in recent_calls %}
-              <tr class="border-b border-gray-100 hover:bg-gray-50">
-                <td class="py-2 px-3 font-medium text-gray-900">{{ call.api_name }}</td>
-                <td class="py-2 px-3 text-gray-500 font-mono text-xs">{{ call.endpoint }}</td>
+              <tr style="border-bottom:1px solid rgba(0,0,0,0.04);">
+                <td class="py-2 px-3 font-medium" style="color:#1d1d1f;">{{ call.api_name }}</td>
+                <td class="py-2 px-3 text-xs font-mono" style="color:#86868b;">{{ call.endpoint }}</td>
                 <td class="py-2 px-3">
-                  <span class="text-xs px-2 py-0.5 rounded-full {{ 'bg-green-100 text-green-700' if call.status_code == 200 else 'bg-red-100 text-red-700' }}">
+                  <span class="text-xs px-2 py-0.5 rounded-full font-medium {{ 'bg-green-100 text-green-700' if call.status_code == 200 else 'bg-red-100 text-red-700' }}">
                     {{ call.status_code }}
                   </span>
                 </td>
-                <td class="py-2 px-3 text-xs text-gray-500">{{ call.called_at.strftime('%Y-%m-%d %H:%M') if call.called_at else '' }}</td>
+                <td class="py-2 px-3 text-xs" style="color:#86868b;">{{ call.called_at.strftime('%Y-%m-%d %H:%M') if call.called_at else '' }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -187,7 +207,7 @@
         {% else %}
         <div class="text-center py-10">
           <div class="text-4xl mb-3">🚀</div>
-          <p class="text-gray-500 text-sm">No API calls yet. Try one of the quick tests above!</p>
+          <p class="text-sm" style="color:#86868b;">No API calls yet. Try one of the quick tests above!</p>
         </div>
         {% endif %}
       </div>
@@ -226,11 +246,11 @@ async function tryAPI(url, method, body, name) {
     const data = await resp.json();
     resBody.textContent = JSON.stringify(data, null, 2);
     resStatus.textContent = resp.status;
-    resStatus.className = 'text-xs font-semibold ' + (resp.ok ? 'text-green-600' : 'text-red-600');
+    resStatus.style.color = resp.ok ? '#34c759' : '#ff3b30';
   } catch(e) {
     resBody.textContent = 'Error: ' + e.message;
     resStatus.textContent = 'Failed';
-    resStatus.className = 'text-xs font-semibold text-red-600';
+    resStatus.style.color = '#ff3b30';
   }
 }
 </script>

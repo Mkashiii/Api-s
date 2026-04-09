@@ -8,7 +8,7 @@ from jwt.exceptions import PyJWTError
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-SECRET_KEY = "rapidapi-platform-secret-key-2026-change-in-production"
+SECRET_KEY = "mk-api-platform-secret-key-2026-change-in-production"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 
